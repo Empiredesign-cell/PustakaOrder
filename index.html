@@ -1285,11 +1285,11 @@
             <strong class="price-cost" id="detailCost"></strong>
           </div>
           <div class="price-row">
-            <span>Markup Margin</span>
+            <span>Margin</span>
             <strong class="price-profit" id="detailMargin"></strong>
           </div>
           <div class="price-row">
-            <span>Harga Jual dari Markup</span>
+            <span>Harga Jual dari Margin</span>
             <strong class="price-big" id="detailCalculatedPrice"></strong>
           </div>
           <div class="price-row">
@@ -1358,7 +1358,7 @@
               <label for="marginPercent">Markup Margin (%)</label>
               <div class="range-wrap">
                 <input class="money" id="marginPercent" name="marginPercent" type="number" min="0" step="0.1" value="0" placeholder="50" />
-                <input id="marginRange" name="marginRange" type="range" min="0" max="300" step="1" value="0" aria-label="Geser markup margin persen" />
+                <input id="marginRange" name="marginRange" type="range" min="0" max="300" step="1" value="0" aria-label="Geser margin persen" />
               </div>
               <p class="field-note">Geser margin. Contoh modal 100.000 + 50% = harga jual 150.000.</p>
             </div>
@@ -1366,7 +1366,7 @@
 
           <div class="field-grid">
             <div class="field">
-              <label for="calculatedPrice">Harga Jual dari Markup Margin</label>
+              <label for="calculatedPrice">Harga Jual dari Margin</label>
               <input class="money readonly-input" id="calculatedPrice" name="calculatedPrice" type="number" readonly placeholder="Otomatis" />
               <p class="field-note">Otomatis dari modal + persentase markup margin.</p>
             </div>
