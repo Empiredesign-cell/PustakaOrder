@@ -1,0 +1,4306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <link rel="icon" type="image/x-icon" href="pusta.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PustakaOrder</title>
+  <style>
+    :root {
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --black: #111827;
+      --gray: #6b7280;
+      --soft-gray: #f3f4f6;
+      --border: #e5e7eb;
+      --white: #ffffff;
+      --red: #ef4444;
+      --green: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f9fafb;
+      color: #1f2937;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding-bottom: 70px;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 10px rgba(15, 23, 42, 0.06);
+      padding: 16px 20px;
+    }
+
+    .nav {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #ffedd5;
+      color: var(--orange);
+      display: grid;
+      place-items: center;
+    }
+
+    .brand-icon img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      display: block;
+    }
+
+    .brand-title h1 {
+      margin: 0;
+      color: #111827;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+    }
+
+    .brand-title h1 span {
+      color: var(--orange);
+    }
+
+    .brand-title p {
+      margin: 3px 0 0;
+      color: #9ca3af;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .search-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--soft-gray);
+      border-radius: 999px;
+      padding: 12px 16px;
+      min-width: 0;
+    }
+
+    .search-box svg {
+      flex: 0 0 auto;
+      color: #6b7280;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--white);
+      background: var(--black);
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 14px;
+      box-shadow: 0 12px 28px rgba(17, 24, 39, 0.16);
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .primary-btn:hover {
+      background: #1f2937;
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 0;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: #ffe8c4;
+      border-radius: 40px;
+      padding: 42px;
+      margin-bottom: 48px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+      gap: 32px;
+      align-items: center;
+      box-shadow: 0 10px 35px rgba(148, 89, 24, 0.08);
+    }
+
+    .hero h2 {
+      margin: 0 0 16px;
+      color: #111827;
+      font-size: clamp(38px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: -0.055em;
+      font-weight: 900;
+    }
+
+    .hero h2 span {
+      color: var(--orange-dark);
+    }
+
+    .hero p {
+      margin: 0 0 26px;
+      max-width: 520px;
+      color: #4b5563;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-blur-1,
+    .hero-blur-2 {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(28px);
+      pointer-events: none;
+    }
+
+    .hero-blur-1 {
+      width: 210px;
+      height: 210px;
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    .hero-blur-2 {
+      right: 30px;
+      width: 160px;
+      height: 280px;
+      background: rgba(253, 186, 116, 0.35);
+      transform: rotate(-45deg);
+    }
+
+    .hero-img {
+      position: relative;
+      z-index: 2;
+      width: min(280px, 80%);
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 32px;
+      box-shadow: 0 24px 60px rgba(17, 24, 39, 0.25);
+      transform: rotate(3deg);
+      transition: 0.35s ease;
+    }
+
+    .hero-img:hover {
+      transform: rotate(0deg) scale(1.02);
+    }
+
+
+    .landing-showcase {
+      position: relative;
+      overflow: hidden;
+      background: #ffffff;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: 34px;
+      padding: 34px 30px 42px;
+      margin-bottom: 48px;
+      box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08);
+    }
+
+    .landing-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .landing-kicker {
+      margin: 0 0 8px;
+      color: var(--orange-dark);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .landing-showcase h2 {
+      margin: 0;
+      text-align: center;
+      color: #353337;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 0.95;
+      letter-spacing: -0.045em;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .landing-subtitle {
+      margin: 12px auto 0;
+      max-width: 620px;
+      color: #6b7280;
+      line-height: 1.6;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .landing-heading-wrap {
+      flex: 1;
+      text-align: center;
+    }
+
+    .landing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+      min-width: 180px;
+    }
+
+    .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #111827;
+      background: #f3f4f6;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 13px;
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .secondary-btn:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .landing-carousel {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .landing-stage {
+      position: relative;
+      min-height: 390px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1200px;
+      overflow: hidden;
+    }
+
+    .landing-frame {
+      position: absolute;
+      width: clamp(155px, 20vw, 260px);
+      aspect-ratio: 3 / 4;
+      background: #ffffff;
+      border: 2px solid rgba(17, 24, 39, 0.66);
+      border-radius: 0;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.11);
+      transform-origin: center center;
+      will-change: transform, opacity, width, box-shadow, filter;
+      transition:
+        transform 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+        width 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .landing-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center center;
+      background: #ffffff;
+      transform: scale(1);
+      transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .landing-frame.pos-center img {
+      transform: scale(1);
+    }
+
+    .landing-stage.is-animating .landing-frame {
+      filter: saturate(1.06);
+    }
+
+    .landing-frame.pos-center {
+      width: clamp(240px, 30vw, 380px);
+      z-index: 5;
+      transform: translateX(0) translateY(8px) scale(1);
+      opacity: 1;
+      box-shadow: 0 28px 58px rgba(15, 23, 42, 0.16);
+    }
+
+    .landing-frame.pos-left {
+      z-index: 4;
+      transform: translateX(clamp(-260px, -26vw, -210px)) translateY(36px) scale(0.93);
+      opacity: 0.94;
+    }
+
+    .landing-frame.pos-right {
+      z-index: 4;
+      transform: translateX(clamp(210px, 26vw, 260px)) translateY(36px) scale(0.93);
+      opacity: 0.94;
+    }
+
+    .landing-frame.pos-left-far {
+      z-index: 3;
+      transform: translateX(clamp(-510px, -48vw, -360px)) translateY(62px) scale(0.78);
+      opacity: 0.78;
+    }
+
+    .landing-frame.pos-right-far {
+      z-index: 3;
+      transform: translateX(clamp(360px, 48vw, 510px)) translateY(62px) scale(0.78);
+      opacity: 0.78;
+    }
+
+    .landing-nav-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #111827;
+      color: #ffffff;
+      box-shadow: 0 14px 30px rgba(17, 24, 39, 0.18);
+      transition: 0.2s ease;
+      z-index: 8;
+    }
+
+    .landing-nav-btn:hover {
+      transform: translateY(-1px) scale(1.03);
+      background: #1f2937;
+    }
+
+    .landing-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .landing-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #d1d5db;
+      transition: 0.2s ease;
+    }
+
+    .landing-dot.active {
+      width: 26px;
+      border-radius: 999px;
+      background: var(--orange);
+    }
+
+    .landing-editor-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .landing-edit-slot {
+      display: grid;
+      grid-template-columns: 108px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      background: #ffffff;
+    }
+
+    .landing-edit-preview {
+      width: 108px;
+      aspect-ratio: 3 / 4;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .landing-edit-content {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .landing-edit-title {
+      margin: 0;
+      color: #111827;
+      font-weight: 950;
+      font-size: 14px;
+    }
+
+    .landing-edit-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 8px;
+    }
+
+    .landing-edit-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      padding: 10px 12px;
+      outline: 0;
+      color: #111827;
+    }
+
+    .landing-edit-input:focus {
+      border-color: #111827;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+    }
+
+    .landing-file-input {
+      display: none;
+    }
+
+    .landing-helper {
+      margin: 0;
+      color: #9ca3af;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .landing-small-action {
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: #ffedd5;
+      color: #c2410c;
+      font-weight: 950;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .landing-small-action:hover {
+      background: #fed7aa;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      color: #111827;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+      font-weight: 900;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .sync-status {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 8px !important;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.1);
+      color: #9a3412 !important;
+      font-weight: 800;
+      font-size: 12px !important;
+    }
+
+    .sync-status.ok {
+      background: rgba(22, 163, 74, 0.12);
+      color: #166534 !important;
+    }
+
+    .sync-status.error {
+      background: rgba(239, 68, 68, 0.12);
+      color: #991b1b !important;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .card-image-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      border-radius: 32px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+      transition: 0.25s ease;
+    }
+
+    .card:hover .card-image-wrap {
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+      transition: transform 0.45s ease;
+    }
+
+    .card:hover .card-image-wrap img {
+      transform: scale(1.055);
+    }
+
+    .badge {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      color: #374151;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+    }
+
+    .delete-btn,
+    .edit-btn {
+      position: absolute;
+      top: 16px;
+      z-index: 5;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.86);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.1);
+      transition: 0.2s ease;
+    }
+
+    .delete-btn {
+      right: 16px;
+      color: var(--red);
+    }
+
+    .edit-btn {
+      right: 58px;
+      color: var(--orange-dark);
+    }
+
+    .delete-btn:hover {
+      color: white;
+      background: var(--red);
+      transform: scale(1.05);
+    }
+
+    .edit-btn:hover {
+      color: white;
+      background: var(--orange-dark);
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      padding: 0 8px;
+    }
+
+    .card-body h4 {
+      margin: 0 0 5px;
+      color: #111827;
+      font-size: 18px;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-size {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .card-vendor {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 7px 0 0;
+      color: var(--orange-dark);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-vendor-contact {
+      margin: 7px 0 0;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .wa-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #16a34a;
+      text-decoration: none;
+      line-height: 1.2;
+      max-width: 100%;
+    }
+
+    .wa-link:hover {
+      color: #15803d;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .wa-link.disabled,
+    .vendor-phone-empty {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #9ca3af;
+      text-decoration: none;
+      pointer-events: none;
+    }
+
+    .card-wa-link,
+    .vendor-phone-empty {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pill.wa-link {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .empty-state {
+      background: white;
+      border: 2px dashed #e5e7eb;
+      border-radius: 32px;
+      padding: 46px 24px;
+      text-align: center;
+      color: #6b7280;
+    }
+
+    .empty-state svg {
+      color: #d1d5db;
+      margin-bottom: 10px;
+    }
+
+    .empty-state h4 {
+      margin: 0 0 4px;
+      color: #111827;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(17, 24, 39, 0.52);
+      backdrop-filter: blur(7px);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .detail-panel {
+      position: relative;
+      overflow: hidden;
+      width: min(940px, 100%);
+      max-height: 92vh;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 30px 70px rgba(15, 23, 42, 0.32);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .detail-img-wrap {
+      min-height: 380px;
+      padding: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-img-wrap img {
+      width: 100%;
+      max-height: 460px;
+      object-fit: cover;
+      border-radius: 24px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.22);
+    }
+
+    .detail-content {
+      padding: 42px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .detail-content h3 {
+      margin: 0 64px 10px 0;
+      color: #111827;
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      font-weight: 950;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 850;
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .pill.orange {
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .info-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 9px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .detail-specs {
+      margin: 0;
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .price-box {
+      margin-top: 26px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 24px;
+      padding: 20px;
+    }
+
+    .price-title {
+      color: #fb923c;
+      margin-bottom: 12px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+
+    .price-row + .price-row {
+      border-top: 1px solid rgba(251, 146, 60, 0.25);
+    }
+
+    .price-row span:first-child {
+      color: #6b7280;
+      font-weight: 750;
+    }
+
+    .price-big {
+      color: var(--green);
+      font-size: 27px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .price-cost {
+      color: #9ca3af;
+      font-size: 19px;
+      font-weight: 900;
+      text-decoration: line-through;
+      white-space: nowrap;
+    }
+
+    .price-profit {
+      color: var(--orange-dark);
+      font-size: 18px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .modal-icon-btn {
+      position: absolute;
+      z-index: 10;
+      top: 16px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.78);
+      color: #4b5563;
+      transition: 0.2s ease;
+    }
+
+    .modal-icon-btn:hover {
+      background: white;
+      transform: scale(1.04);
+    }
+
+    .modal-close {
+      right: 16px;
+    }
+
+    .modal-delete {
+      right: 62px;
+      color: var(--red);
+    }
+
+    .modal-edit {
+      right: 108px;
+      color: var(--orange-dark);
+    }
+
+    .modal-delete:hover {
+      background: var(--red);
+      color: white;
+    }
+
+    .modal-edit:hover {
+      background: var(--orange-dark);
+      color: white;
+    }
+
+    .form-panel {
+      width: min(660px, 100%);
+      max-height: 92vh;
+      background: white;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 30px 70px rgba(15, 23, 42, 0.34);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-head {
+      padding: 24px 30px;
+      background: #fbfbfc;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .form-head h2 {
+      margin: 0;
+      color: #111827;
+      font-size: 26px;
+      letter-spacing: -0.035em;
+      font-weight: 950;
+    }
+
+    .form-body {
+      overflow-y: auto;
+      padding: 30px;
+    }
+
+    form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field label,
+    .upload-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .field input,
+    .field select,
+    .field textarea,
+    .image-url-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 13px 15px;
+      outline: 0;
+      transition: 0.2s ease;
+      color: #111827;
+      background: white;
+    }
+
+    .field textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus,
+    .image-url-input:focus {
+      border-color: #111827;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+    }
+
+    .money {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .money.sell {
+      color: var(--green);
+      font-weight: 900;
+    }
+
+
+    .range-wrap {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .range-wrap input[type="range"] {
+      width: 100%;
+      accent-color: var(--orange);
+      cursor: pointer;
+    }
+
+    .range-wrap input[type="number"] {
+      text-align: center;
+      font-weight: 950;
+    }
+
+    .paste-zone {
+      border: 1.5px dashed #d1d5db;
+      border-radius: 24px;
+      padding: 26px;
+      text-align: center;
+      outline: 0;
+      transition: 0.2s ease;
+      background: white;
+    }
+
+    .paste-zone:hover,
+    .paste-zone:focus {
+      border-color: var(--orange);
+      background: #fff7ed;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.08);
+    }
+
+    .paste-zone.is-dragover {
+      border-color: var(--orange);
+      background: #fff7ed;
+      box-shadow: 0 0 0 5px rgba(249, 115, 22, 0.14);
+      transform: translateY(-1px);
+    }
+
+    .paste-icon {
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 12px;
+      color: #d1d5db;
+    }
+
+    .preview-img {
+      display: none;
+      width: auto;
+      max-width: 100%;
+      height: 138px;
+      object-fit: contain;
+      border-radius: 14px;
+      margin: 0 auto 14px;
+      background: #f9fafb;
+      border: 1px solid #f1f5f9;
+    }
+
+    .upload-copy {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .upload-copy label {
+      display: inline;
+      color: var(--orange-dark);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .hint {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 8px;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+
+    .image-url-input {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 13px;
+      border-width: 0 0 1px 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .save-btn {
+      width: 100%;
+      border-radius: 16px;
+      padding: 16px 18px;
+      background: #111827;
+      color: white;
+      font-weight: 950;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 18px 40px rgba(17, 24, 39, 0.2);
+      transition: 0.2s ease;
+    }
+
+    .save-btn:hover {
+      background: #1f2937;
+      transform: translateY(-1px);
+    }
+
+
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 46px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #111827;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      background: #e5e7eb;
+    }
+
+    .url-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    .url-row .image-url-input {
+      margin-top: 0;
+    }
+
+    .small-btn {
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #ffedd5;
+      color: #c2410c;
+      font-size: 13px;
+      font-weight: 950;
+      white-space: nowrap;
+      transition: 0.2s ease;
+    }
+
+    .small-btn:hover {
+      background: #fed7aa;
+      transform: translateY(-1px);
+    }
+
+    .preview-list {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .preview-item {
+      cursor: grab;
+    }
+
+    .preview-item:active {
+      cursor: grabbing;
+    }
+
+    .preview-item.is-dragging {
+      opacity: 0.45;
+      transform: scale(0.96);
+    }
+
+    .preview-item.is-drop-target {
+      outline: 3px solid var(--orange);
+      outline-offset: 2px;
+    }
+
+    .preview-main-badge {
+      position: absolute;
+      left: 6px;
+      bottom: 6px;
+      z-index: 2;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: rgba(17, 24, 39, 0.82);
+      color: #ffffff;
+      font-size: 9px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+    }
+
+    .preview-drag-hint {
+      margin: 8px 0 0;
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-remove {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--red);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.16);
+    }
+
+    .preview-count {
+      margin: 8px 0 0;
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .detail-img-stack {
+      width: 100%;
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+    }
+
+    .detail-thumbs {
+      display: flex;
+      gap: 9px;
+      max-width: 100%;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .detail-thumb {
+      width: 58px;
+      height: 58px;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      padding: 0;
+      background: white;
+      border: 2px solid transparent;
+      overflow: hidden;
+      opacity: 0.72;
+      transition: 0.2s ease;
+    }
+
+    .detail-thumb.active,
+    .detail-thumb:hover {
+      border-color: var(--orange);
+      opacity: 1;
+    }
+
+    .detail-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .readonly-input {
+      background: #f9fafb !important;
+      color: #16a34a !important;
+      font-weight: 950;
+    }
+
+    .field-note {
+      margin: 7px 0 0;
+      color: #9ca3af;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .price-mode-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .price-mode-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 18px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .price-mode-option:hover,
+    .price-mode-option.active {
+      border-color: var(--orange);
+      background: #fff7ed;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.08);
+    }
+
+    .price-mode-option input {
+      margin-top: 3px;
+      accent-color: var(--orange);
+      flex: 0 0 auto;
+    }
+
+    .price-mode-option strong {
+      display: block;
+      color: #111827;
+      font-size: 14px;
+      font-weight: 950;
+    }
+
+    .price-mode-option span {
+      display: block;
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .price-mode-hint {
+      margin-top: 8px;
+      color: #9ca3af;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .price-normal {
+      color: #374151;
+      font-size: 20px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .field.disabled-soft {
+      opacity: 0.62;
+    }
+
+    body[data-theme="dark"] {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    body[data-theme="dark"] .header {
+      background: rgba(15, 23, 42, 0.96);
+      box-shadow: 0 1px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    body[data-theme="dark"] .brand-title h1,
+    body[data-theme="dark"] .section-head h3,
+    body[data-theme="dark"] .hero h2,
+    body[data-theme="dark"] .card-body h4,
+    body[data-theme="dark"] .empty-state h4,
+    body[data-theme="dark"] .detail-content h3,
+    body[data-theme="dark"] .form-head h2 {
+      color: #f8fafc;
+    }
+
+    body[data-theme="dark"] .search-box,
+    body[data-theme="dark"] .theme-toggle,
+    body[data-theme="dark"] .pill,
+    body[data-theme="dark"] .readonly-input {
+      background: #1e293b !important;
+      color: #e5e7eb !important;
+    }
+
+    body[data-theme="dark"] .search-box input,
+    body[data-theme="dark"] .field input,
+    body[data-theme="dark"] .field select,
+    body[data-theme="dark"] .field textarea,
+    body[data-theme="dark"] .image-url-input {
+      color: #f8fafc;
+    }
+
+    body[data-theme="dark"] .hero {
+      background: linear-gradient(135deg, #7c2d12, #1e293b);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.22);
+    }
+
+    body[data-theme="dark"] .hero p,
+    body[data-theme="dark"] .section-head p,
+    body[data-theme="dark"] .card-size,
+    body[data-theme="dark"] .detail-specs,
+    body[data-theme="dark"] .field-note,
+    body[data-theme="dark"] .upload-copy,
+    body[data-theme="dark"] .hint,
+    body[data-theme="dark"] .preview-count,
+    body[data-theme="dark"] .price-row span:first-child {
+      color: #cbd5e1;
+    }
+
+    body[data-theme="dark"] .form-panel,
+    body[data-theme="dark"] .detail-panel,
+    body[data-theme="dark"] .empty-state,
+    body[data-theme="dark"] .paste-zone,
+    body[data-theme="dark"] .field input,
+    body[data-theme="dark"] .field select,
+    body[data-theme="dark"] .field textarea,
+    body[data-theme="dark"] .preview-item {
+      background: #111827;
+      border-color: #334155;
+    }
+
+    body[data-theme="dark"] .form-head {
+      background: #0f172a;
+      border-bottom-color: #334155;
+    }
+
+    body[data-theme="dark"] .price-box {
+      background: rgba(124, 45, 18, 0.42);
+      border-color: rgba(251, 146, 60, 0.35);
+    }
+
+    body[data-theme="dark"] .modal-icon-btn,
+    body[data-theme="dark"] .delete-btn,
+    body[data-theme="dark"] .edit-btn,
+    body[data-theme="dark"] .detail-thumb,
+    body[data-theme="dark"] .preview-remove {
+      background: rgba(15, 23, 42, 0.86);
+      color: #e5e7eb;
+    }
+
+    body[data-theme="dark"] .modal-delete,
+    body[data-theme="dark"] .delete-btn,
+    body[data-theme="dark"] .preview-remove {
+      color: #f87171;
+    }
+
+    body[data-theme="dark"] .modal-edit,
+    body[data-theme="dark"] .edit-btn {
+      color: #fdba74;
+    }
+
+    body[data-theme="dark"] .image-url-input {
+      background: transparent;
+      border-color: #334155;
+    }
+
+
+    body[data-theme="dark"] .price-mode-option {
+      background: #111827;
+      border-color: #334155;
+    }
+
+    body[data-theme="dark"] .price-mode-option:hover,
+    body[data-theme="dark"] .price-mode-option.active {
+      background: rgba(124, 45, 18, 0.42);
+      border-color: var(--orange);
+    }
+
+    body[data-theme="dark"] .price-mode-option strong,
+    body[data-theme="dark"] .price-normal {
+      color: #f8fafc;
+    }
+
+    body[data-theme="dark"] .price-mode-option span,
+    body[data-theme="dark"] .price-mode-hint {
+      color: #cbd5e1;
+    }
+
+    body[data-theme="dark"] .wa-link,
+    body[data-theme="dark"] .pill.wa-link {
+      color: #86efac;
+    }
+
+    body[data-theme="dark"] .pill.wa-link {
+      background: rgba(22, 163, 74, 0.18);
+    }
+
+    body[data-theme="dark"] .wa-link:hover {
+      color: #bbf7d0;
+    }
+
+    body[data-theme="dark"] .vendor-phone-empty,
+    body[data-theme="dark"] .wa-link.disabled {
+      color: #94a3b8;
+    }
+
+
+    body[data-theme="dark"] .preview-main-badge {
+      background: rgba(248, 250, 252, 0.88);
+      color: #0f172a;
+    }
+
+    body[data-theme="dark"] .preview-drag-hint {
+      color: #94a3b8;
+    }
+
+
+
+
+    /* v17: tampilan clean tanpa frame warna-warni */
+    .section-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .vendor-access-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #111827;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 950;
+      box-shadow: 0 10px 22px rgba(17, 24, 39, 0.16);
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .vendor-access-btn:hover {
+      transform: translateY(-1px);
+      background: #1f2937;
+    }
+
+    .vendor-access-btn.unlocked {
+      background: #16a34a;
+    }
+
+    .card-image-wrap {
+      padding: 0 !important;
+      background: transparent !important;
+      border-radius: 22px !important;
+      box-shadow: none !important;
+    }
+
+    .card:hover .card-image-wrap {
+      box-shadow: none !important;
+      transform: translateY(-2px);
+    }
+
+    .card-image-wrap img {
+      border-radius: 22px !important;
+      box-shadow: none !important;
+    }
+
+    .detail-img-wrap {
+      background: transparent !important;
+    }
+
+    .detail-img-wrap img {
+      box-shadow: none !important;
+    }
+
+    .bg-green,
+    .bg-purple,
+    .bg-peach,
+    .bg-cyan,
+    .bg-pink,
+    .bg-clean {
+      background: transparent !important;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 0;
+      margin-bottom: 5px;
+    }
+
+    .card-title-row h4 {
+      flex: 1;
+      min-width: 0;
+      margin-bottom: 0;
+    }
+
+    .card-info-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 0;
+      margin-top: 2px;
+    }
+
+    .card-meta-left {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .card-price-inline {
+      display: inline-flex;
+      justify-content: flex-end;
+      align-items: center;
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 950;
+      line-height: 1.2;
+      white-space: nowrap;
+      letter-spacing: -0.02em;
+      margin-top: 5px;
+      flex: 0 0 auto;
+      text-align: right;
+    }
+
+    .card-price-row {
+      display: none;
+    }
+
+    .vendor-locked-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 7px;
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .vendor-lock-pill {
+      background: #f3f4f6 !important;
+      color: #6b7280 !important;
+    }
+
+    .vendor-gated-field.is-hidden {
+      display: none !important;
+    }
+
+
+    body:not(.full-access) .full-access-only {
+      display: none !important;
+    }
+
+    .sensitive-price-row {
+      display: none;
+    }
+
+    body.full-access .sensitive-price-row {
+      display: flex;
+    }
+
+    body:not(.full-access) .price-box {
+      padding: 18px 20px;
+    }
+
+    body:not(.full-access) .price-box .price-row {
+      border-top: 0;
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .vendor-access-btn.unlocked {
+      background: rgba(22, 163, 74, 0.14);
+      color: #166534;
+    }
+
+
+    .vendor-form-lock-note {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+
+    .vendor-form-lock-note.is-visible {
+      display: flex;
+    }
+
+    .vendor-form-unlock-btn {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 9px 12px;
+      background: #111827;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+      transition: 0.2s ease;
+    }
+
+    .vendor-form-unlock-btn:hover {
+      background: #1f2937;
+      transform: translateY(-1px);
+    }
+
+    body[data-theme="dark"] .vendor-access-btn {
+      background: #f97316;
+      color: #111827;
+    }
+
+    body[data-theme="dark"] .vendor-access-btn.unlocked {
+      background: #22c55e;
+      color: #052e16;
+    }
+
+    body[data-theme="dark"] .vendor-locked-note {
+      color: #94a3b8;
+    }
+
+    body[data-theme="dark"] .vendor-lock-pill {
+      background: #1e293b !important;
+      color: #cbd5e1 !important;
+    }
+
+
+    body[data-theme="dark"] .vendor-form-lock-note {
+      background: rgba(124, 45, 18, 0.42);
+      border-color: rgba(251, 146, 60, 0.35);
+      color: #fdba74;
+    }
+
+    body[data-theme="dark"] .vendor-form-unlock-btn {
+      background: #f97316;
+      color: #111827;
+    }
+
+
+
+    body[data-theme="dark"] .landing-showcase,
+    body[data-theme="dark"] .landing-edit-slot {
+      background: #111827;
+      border-color: #334155;
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    body[data-theme="dark"] .landing-showcase h2,
+    body[data-theme="dark"] .landing-edit-title {
+      color: #f8fafc;
+    }
+
+    body[data-theme="dark"] .landing-subtitle,
+    body[data-theme="dark"] .landing-helper {
+      color: #cbd5e1;
+    }
+
+    body[data-theme="dark"] .secondary-btn {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+
+    body[data-theme="dark"] .secondary-btn:hover {
+      background: #334155;
+    }
+
+    body[data-theme="dark"] .landing-frame,
+    body[data-theme="dark"] .landing-edit-preview,
+    body[data-theme="dark"] .landing-edit-input {
+      background: #0f172a;
+      border-color: #475569;
+    }
+
+    body[data-theme="dark"] .landing-edit-input {
+      color: #f8fafc;
+    }
+
+    .bg-green { background: #9ae5af; }
+    .bg-purple { background: #e6caff; }
+    .bg-peach { background: #ffceb3; }
+    .bg-cyan { background: #a6e6e2; }
+    .bg-pink { background: #ffb3c6; }
+
+    @media (max-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 780px) {
+      .brand-title {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 32px;
+      }
+
+      .hero-art {
+        min-height: 220px;
+      }
+
+      .landing-top {
+        display: grid;
+        justify-items: center;
+      }
+
+      .landing-actions {
+        justify-content: center;
+      }
+
+      .landing-stage {
+        min-height: 330px;
+      }
+
+      .landing-frame.pos-left-far,
+      .landing-frame.pos-right-far {
+        opacity: 0.28;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .detail-panel {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+
+      .detail-img-wrap {
+        min-height: 270px;
+      }
+
+      .detail-content {
+        padding: 28px;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header {
+        padding: 12px;
+      }
+
+      .nav {
+        gap: 10px;
+      }
+
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+      }
+
+      .primary-btn {
+        padding: 12px;
+      }
+
+      .primary-btn span {
+        display: none;
+      }
+
+      #themeLabel {
+        display: none;
+      }
+
+      .container {
+        padding: 22px 14px 0;
+      }
+
+      .hero {
+        border-radius: 28px;
+        padding: 26px;
+        margin-bottom: 34px;
+      }
+
+      .landing-showcase {
+        border-radius: 24px;
+        padding: 24px 14px 30px;
+        margin-bottom: 34px;
+      }
+
+      .landing-showcase h2 {
+        font-size: clamp(28px, 10vw, 42px);
+      }
+
+      .landing-carousel {
+        grid-template-columns: 1fr;
+      }
+
+      .landing-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .landing-nav-btn:hover {
+        transform: translateY(-50%) scale(1.03);
+      }
+
+      #landingPrevBtn { left: 8px; }
+      #landingNextBtn { right: 8px; }
+
+      .landing-stage {
+        min-height: 300px;
+      }
+
+      .landing-frame.pos-center {
+        width: min(62vw, 270px);
+      }
+
+      .landing-frame.pos-left,
+      .landing-frame.pos-right {
+        width: min(42vw, 180px);
+      }
+
+      .landing-frame.pos-left-far,
+      .landing-frame.pos-right-far {
+        display: none;
+      }
+
+      .landing-frame.pos-left {
+        transform: translateX(-34vw) translateY(36px) scale(0.82);
+      }
+
+      .landing-frame.pos-right {
+        transform: translateX(34vw) translateY(36px) scale(0.82);
+      }
+
+      .landing-edit-slot {
+        grid-template-columns: 1fr;
+      }
+
+      .landing-edit-preview {
+        width: 100%;
+        max-height: 190px;
+        aspect-ratio: 16 / 9;
+      }
+
+      .landing-edit-row {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-body,
+      .form-head {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .detail-content h3 {
+        font-size: 28px;
+      }
+
+      .price-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="nav">
+      <div class="brand" aria-label="PerpusOrder">
+        <div class="brand-icon" id="pizzaIcon"><img src="data:image/png;base64,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Gg8FDxERkYTTczxEREREwQPNeIiIiCh49BvdTisiIqLgoWUTEREpAXqAmIKHiIhI0il4iIiIiHbuCh4iIiIKHlo2ERERUfAQERGRv3E9uVTBQ0REJOkUPEREREQ7dwUPERERBQ8tm4iISClI6xoPBQ8REZGE09tpRURERMEDw9Q8IiIiCh5aNhEREVHwEBERkS56gJiCh4iISNIpeIiIiIh27goeIiIiCh5aNhERkVKQ0jUee75QgZmh22lFRETiJpLB438/rtkOERERBY9+ctBQBQ8REREFj35SXabgISIiouDRT8rTCh4iIiJ7RQ8Q23OZlIKHiIhIHEVyB58OFDxEREQUPPpJqlnBQ0RERMGjvxZKp1pEREQUPPqL6VSLiIjIXnE9ubQbwaNcTy0VERGJo2gGD9OMh4iIiIKHgoeIiIgoeIiIiMhOIvoAsbQCkUg8OYR0fkpRqS576dbcCTH1lzgttwcUo7jS5h69QDQ3sOBf/5Xqvvr+xSJhsVh6nbRQIOzoKM2BYetWwnXrSnPZ//AHwitCL9UBWUREwUNERESSSac0RERERMFDREREFDxEREREFDxEREREwUNEREREwUNEREQUPERERETBQ0RERETBQ0RERBQ8RERERBQ8RERERMFDREREFDxEREREFDxEREREwUNEREREwUNEREQUPERERETBQ0RERETBQ0RERBQ8RERERBQ8RERERMFDREREFDxEREREFDxEREREwUNEREREwUNEREQUPERERETBQ0RERETBQ0RERBQ8RERERBQ8RERERMFDRERERMFDREREFDxEREREwUNEREREwUNERERKxf8HARxj/6Q3Fj8AAAAASUVORK5CYII=" alt="Logo PustakaOrder"></div>
+        <div class="brand-title">
+          <h1>Pustaka<span>Order</span></h1>
+          <p>Cipta Digital</p>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <span id="searchIcon"></span>
+        <input id="searchInput" type="text" placeholder="Search produk yang dicari..." autocomplete="off" />
+      </div>
+
+      <button class="theme-toggle" id="themeToggleBtn" type="button" title="Ganti Dark / Light Mode">
+        <span id="themeIcon"></span>
+        <span id="themeLabel">Dark</span>
+      </button>
+
+      <button class="primary-btn full-access-only" id="openAddBtn" type="button" title="Tambah Order">
+        <span id="plusIconHeader"></span>
+        <span>Tambah Order</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="landing-showcase" aria-label="Landing foto Cipta Digital">
+      <div class="landing-top">
+        <div class="landing-heading-wrap">
+          <p class="landing-kicker">PustakaOrder</p>
+          <h2>Selamat Datang di Cipta Digital</h2>
+          <p class="landing-subtitle">Siap Memberi Manfaat</p>
+        </div>
+        <div class="landing-actions full-access-only">
+          <button class="secondary-btn" id="openLandingBtn" type="button">Edit Foto</button>
+        </div>
+      </div>
+
+      <div class="landing-carousel">
+        <button class="landing-nav-btn" id="landingPrevBtn" type="button" aria-label="Foto sebelumnya">‹</button>
+        <div class="landing-stage" id="landingStage" aria-live="polite"></div>
+        <button class="landing-nav-btn" id="landingNextBtn" type="button" aria-label="Foto berikutnya">›</button>
+      </div>
+      <div class="landing-dots" id="landingDots" aria-label="Navigasi foto landing"></div>
+    </section>
+
+    <div class="section-head">
+      <div>
+        <h3>Koleksi Produk / Orderan</h3>
+        <p id="resultText">0 produk ditemukan</p>
+        <p id="firebaseStatus" class="sync-status">Terhubung | v33 single add button</p>
+      </div>
+      <div class="section-actions">
+        <button class="vendor-access-btn" id="vendorAccessBtn" type="button">🔒Masuk Admin</button>
+      </div>
+    </div>
+
+    <section id="productGrid" class="grid" aria-live="polite"></section>
+    <section id="emptyState" class="empty-state" style="display:none;">
+      <div id="emptySearchIcon"></div>
+      <h4>Produk tidak ditemukan</h4>
+      <p>Coba cari nama produk, vendor, ukuran, atau spesifikasi lainnya.</p>
+    </section>
+  </main>
+
+  <div class="modal" id="detailModal" aria-hidden="true">
+    <div class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detailName">
+      <button class="modal-icon-btn modal-close" type="button" id="closeDetailBtn" aria-label="Tutup detail"></button>
+      <button class="modal-icon-btn modal-delete full-access-only" type="button" id="deleteDetailBtn" aria-label="Hapus produk"></button>
+      <button class="modal-icon-btn modal-edit full-access-only" type="button" id="editDetailBtn" aria-label="Edit produk"></button>
+      <div class="detail-img-wrap" id="detailImageWrap">
+        <div class="detail-img-stack">
+          <img id="detailImage" src="" alt="" />
+          <div class="detail-thumbs" id="detailThumbs" aria-label="Galeri foto produk"></div>
+        </div>
+      </div>
+      <div class="detail-content">
+        <h3 id="detailName"></h3>
+        <div class="pill-row">
+          <span class="pill" id="detailSize"></span>
+          <span class="pill orange" id="detailVendor"></span>
+          <a class="pill wa-link" id="detailVendorPhone" href="#" target="_blank" rel="noopener"></a>
+        </div>
+
+        <div>
+          <p class="info-title" id="infoTitle"></p>
+          <p class="detail-specs" id="detailSpecs"></p>
+        </div>
+
+        <div class="price-box">
+          <div class="info-title price-title" id="priceTitle"></div>
+          <div class="price-row">
+            <span>Harga Jual</span>
+            <strong class="price-big" id="detailPrice"></strong>
+          </div>
+          <div class="price-row sensitive-price-row">
+            <span>Harga Modal</span>
+            <strong class="price-normal" id="detailCost"></strong>
+          </div>
+          <div class="price-row sensitive-price-row">
+            <span>Margin</span>
+            <strong class="price-profit" id="detailMargin"></strong>
+          </div>
+          <div class="price-row sensitive-price-row">
+            <span>Profit</span>
+            <strong class="price-profit" id="detailProfit"></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="addModal" aria-hidden="true">
+    <div class="form-panel" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+      <div class="form-head">
+        <h2 id="formTitle">Tambah Order / Produk Baru</h2>
+        <button class="modal-icon-btn" style="position:static;" type="button" id="closeAddBtn" aria-label="Tutup form"></button>
+      </div>
+
+      <div class="form-body">
+        <form id="productForm">
+          <div>
+            <span class="upload-label">Foto Produk / Galeri</span>
+            <div class="paste-zone" id="pasteZone" tabindex="0" title="Klik area ini lalu paste gambar / Ctrl+V">
+              <div id="imagePlaceholder" class="paste-icon"></div>
+              <p class="upload-copy">
+                <label for="fileUpload">Upload banyak foto</label>, drag & drop foto, paste gambar langsung, atau paste URL gambar.
+              </p>
+              <span class="hint" id="pasteHint"></span>
+              <input class="file-input" id="fileUpload" type="file" accept="image/*" multiple />
+              <div class="url-row">
+                <input class="image-url-input" id="imageUrl" name="imageUrl" type="text" placeholder="Tempel 1 atau beberapa URL gambar" autocomplete="off" />
+                <button class="small-btn" id="addUrlBtn" type="button">Tambah URL</button>
+              </div>
+              <div class="preview-list" id="previewList"></div>
+              <p class="preview-count" id="previewCount">Belum ada foto dipilih</p>
+              <p class="preview-drag-hint">Foto pertama akan jadi foto utama. Drag foto untuk mengatur urutan.</p>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="name">Nama Orderan / Produk</label>
+              <input required id="name" name="name" type="text" placeholder="Misal: Plakat Emas" />
+            </div>
+            <div class="field">
+              <label for="vendor">Vendor</label>
+              <input id="vendor" name="vendor" type="text" placeholder="Misal: Vendor Karawang" />
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="vendorPhone">Nomor WA Vendor</label>
+              <input id="vendorPhone" name="vendorPhone" type="tel" inputmode="tel" placeholder="Contoh: 081234567890" />
+              <p class="field-note">Nomor ini nanti bisa diklik untuk langsung chat WhatsApp vendor.</p>
+            </div>
+            <div class="field">
+              <label for="size">Ukuran</label>
+              <input id="size" name="size" type="text" placeholder="Misal: 20x15 cm" />
+            </div>
+          </div>
+
+          <div class="vendor-form-lock-note" id="vendorFormLockNote">
+            <span>Khusus Admin</span>
+            <button class="vendor-form-unlock-btn" id="unlockVendorFormBtn" type="button">Buka Password</button>
+          </div>
+
+          <div class="field">
+            <label for="specs">Spesifikasi Lengkap</label>
+            <textarea id="specs" name="specs" placeholder="Tuliskan material, ketebalan, warna, finishing, dll..."></textarea>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="costPrice">Harga Modal (Rp)</label>
+              <input class="money" id="costPrice" name="costPrice" type="number" min="0" placeholder="50000" />
+            </div>
+            <div class="field">
+              <label for="marginPercent">Markup Margin (%)</label>
+              <div class="range-wrap">
+                <input class="money" id="marginPercent" name="marginPercent" type="number" min="0" step="0.1" value="0" placeholder="50" />
+                <input id="marginRange" name="marginRange" type="range" min="0" max="300" step="1" value="0" aria-label="Geser margin persen" />
+              </div>
+              <p class="field-note">Geser margin. Contoh modal 100.000 + 50% = harga jual 150.000.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Harga Jual yang Dipakai</label>
+            <div class="price-mode-group" id="priceModeGroup">
+              <label class="price-mode-option active" data-price-mode-option="margin">
+                <input type="radio" name="priceMode" value="margin" checked />
+                <span>
+                  <strong>Dari Margin</strong>
+                  <span>Harga jual otomatis dari modal + markup margin.</span>
+                </span>
+              </label>
+              <label class="price-mode-option" data-price-mode-option="custom">
+                <input type="radio" name="priceMode" value="custom" />
+                <span>
+                  <strong>Custom Manual</strong>
+                  <span>Harga jual diisi sendiri, profit tetap dihitung otomatis.</span>
+                </span>
+              </label>
+            </div>
+            <p class="price-mode-hint">Di detail produk nanti hanya harga jual yang dipilih yang akan tampil.</p>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="calculatedPrice">Harga Jual dari Margin</label>
+              <input class="money readonly-input" id="calculatedPrice" name="calculatedPrice" type="number" readonly placeholder="Otomatis" />
+              <p class="field-note">Otomatis dari modal + persentase markup margin.</p>
+            </div>
+            <div class="field" id="customPriceField">
+              <label for="price">Harga Jual Custom (Rp)</label>
+              <input class="money sell" id="price" name="price" type="number" min="0" placeholder="Pilih Custom Manual untuk mengisi" disabled />
+              <p class="field-note">Dipakai hanya kalau metode harga jual dipilih Custom Manual.</p>
+            </div>
+          </div>
+
+          <button class="save-btn" type="submit">
+            <span id="plusIconSave"></span> <span id="saveBtnText">Simpan ke Perpustakaan</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal" id="landingModal" aria-hidden="true">
+    <div class="form-panel" role="dialog" aria-modal="true" aria-labelledby="landingFormTitle">
+      <div class="form-head">
+        <h2 id="landingFormTitle">Edit Foto Landing</h2>
+        <button class="modal-icon-btn" style="position:static;" type="button" id="closeLandingBtn" aria-label="Tutup edit landing"></button>
+      </div>
+      <div class="form-body">
+        <form id="landingForm">
+          <p class="field-note">Isi 5 foto landing. Setelah disimpan, foto akan diupload ke Supabase dan tampil online di perangkat lain.</p>
+          <div class="landing-editor-grid" id="landingEditorGrid"></div>
+          <button class="save-btn" type="submit">Simpan Foto Landing</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://dhqbsfmlqzgvwwfztcbp.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2DMoMl32Ce0lObd05CpCPw_t5DhKF0m";
+    const SUPABASE_TABLE = "products";
+    const LANDING_SUPABASE_TABLE = "landing_settings";
+    const SUPABASE_BUCKET = "product-images";
+    const SUPABASE_REST_URL = `${SUPABASE_URL}/rest/v1`;
+    const SUPABASE_STORAGE_URL = `${SUPABASE_URL}/storage/v1`;
+    const SUPABASE_TIMEOUT_MS = 12000;
+
+    function encodeStoragePath(path) {
+      return String(path || '')
+        .split('/')
+        .filter(Boolean)
+        .map((part) => encodeURIComponent(part))
+        .join('/');
+    }
+
+    function getSupabaseHeaders(extra = {}) {
+      return {
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+        ...extra
+      };
+    }
+
+    function parseSupabaseError(response, bodyText) {
+      let parsed = null;
+      try { parsed = bodyText ? JSON.parse(bodyText) : null; } catch (_) {}
+      const message = parsed?.message || parsed?.msg || bodyText || response.statusText || 'Request Supabase gagal';
+      const details = parsed?.details || parsed?.hint || parsed?.code || '';
+      const error = new Error(details ? `${message} ${details}` : message);
+      error.status = response.status;
+      error.code = parsed?.code || response.status;
+      error.details = details;
+      return error;
+    }
+
+    async function fetchWithTimeout(url, options = {}, timeoutMs = SUPABASE_TIMEOUT_MS) {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(url, { ...options, cache: 'no-store', signal: controller.signal });
+      } catch (error) {
+        if (error?.name === 'AbortError') {
+          throw new Error(`Koneksi Supabase timeout lebih dari ${Math.round(timeoutMs / 1000)} detik. Cek internet, URL project, atau Rules/Policy.`);
+        }
+        throw error;
+      } finally {
+        window.clearTimeout(timer);
+      }
+    }
+
+    async function supabaseJsonRequest(path, options = {}) {
+      const method = options.method || 'GET';
+      let body = options.body;
+      const headers = getSupabaseHeaders(options.headers || {});
+
+      if (body !== undefined && !(body instanceof Blob) && !(body instanceof FormData) && typeof body !== 'string') {
+        headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+        body = JSON.stringify(body);
+      }
+
+      const response = await fetchWithTimeout(`${SUPABASE_REST_URL}${path}`, { method, headers, body });
+      const text = await response.text();
+      if (!response.ok) throw parseSupabaseError(response, text);
+      if (!text) return null;
+      try { return JSON.parse(text); } catch (_) { return text; }
+    }
+
+    async function supabaseStorageUpload(path, blob) {
+      const response = await fetchWithTimeout(`${SUPABASE_STORAGE_URL}/object/${SUPABASE_BUCKET}/${encodeStoragePath(path)}`, {
+        method: 'POST',
+        headers: getSupabaseHeaders({
+          'Content-Type': blob.type || 'application/octet-stream',
+          'cache-control': '3600',
+          'x-upsert': 'true'
+        }),
+        body: blob
+      }, 25000);
+      const text = await response.text();
+      if (!response.ok) throw parseSupabaseError(response, text);
+      return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_BUCKET}/${encodeStoragePath(path)}`;
+    }
+
+    async function supabaseStorageRemove(paths = []) {
+      const cleanPaths = (paths || []).filter(Boolean);
+      if (!cleanPaths.length) return null;
+      const response = await fetchWithTimeout(`${SUPABASE_STORAGE_URL}/object/${SUPABASE_BUCKET}`, {
+        method: 'DELETE',
+        headers: getSupabaseHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ prefixes: cleanPaths })
+      });
+      const text = await response.text();
+      if (!response.ok) throw parseSupabaseError(response, text);
+      return text ? JSON.parse(text) : null;
+    }
+
+    const STORAGE_KEY = 'perpusorder_products_v7_empty';
+    const OLD_STORAGE_KEYS = [
+      'perpusorder_products_v5_metadata',
+      'perpusorder_products_v4',
+      'perpusorder_products_v3',
+      'perpusorder_products_v2',
+      'perpusorder_products_v1'
+    ];
+    const FRESH_RESET_KEY = 'perpusorder_fresh_empty_v7_done';
+    const THEME_KEY = 'perpusorder_theme';
+    const LANDING_STORAGE_KEY = 'pustakaorder_landing_showcase_v1';
+    const VENDOR_ACCESS_SESSION_KEY = 'pustakaorder_vendor_access_unlocked';
+    // Password vendor dibuat tetap dan tidak bisa diubah dari website.
+    // Plaintext password tidak ditulis di HTML; yang dicek hanya hash dari password.
+    const VENDOR_FIXED_PASSWORD_HASH = '402a89ae';
+    const IMAGE_DB_NAME = 'perpusorder_images_v7';
+    const OLD_IMAGE_DB_NAMES = ['perpusorder_images_v1'];
+    const IMAGE_DB_VERSION = 1;
+    const IMAGE_STORE_NAME = 'product_images';
+    const BG_COLORS = ['bg-clean'];
+    const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1618365908648-e71bd5716cba?auto=format&fit=crop&w=400&q=80';
+    const DEFAULT_LANDING_IMAGES = [1, 2, 3, 4, 5].map((number) => defaultLandingImage(number));
+
+    const defaultProducts = [];
+
+    let products = [];
+    let selectedId = null;
+    let editingId = null;
+    let imageDataList = [];
+    let imageStoreCache = {};
+    let priceTouched = false;
+    let draggedImageIndex = null;
+    let landingImages = [];
+    let landingEditorImages = [];
+    let landingActiveIndex = 2;
+    let vendorAccessUnlocked = sessionStorage.getItem(VENDOR_ACCESS_SESSION_KEY) === '1';
+
+    const $ = (selector) => document.querySelector(selector);
+
+    function openImageDb() {
+      return new Promise((resolve, reject) => {
+        if (!('indexedDB' in window)) {
+          reject(new Error('IndexedDB tidak tersedia di browser ini'));
+          return;
+        }
+
+        const request = indexedDB.open(IMAGE_DB_NAME, IMAGE_DB_VERSION);
+        request.onupgradeneeded = () => {
+          const db = request.result;
+          if (!db.objectStoreNames.contains(IMAGE_STORE_NAME)) {
+            db.createObjectStore(IMAGE_STORE_NAME, { keyPath: 'productId' });
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('Gagal membuka database foto'));
+      });
+    }
+
+    async function loadImageCache() {
+      try {
+        const db = await openImageDb();
+        return await new Promise((resolve, reject) => {
+          const transaction = db.transaction(IMAGE_STORE_NAME, 'readonly');
+          const store = transaction.objectStore(IMAGE_STORE_NAME);
+          const request = store.getAll();
+          request.onsuccess = () => {
+            const cache = {};
+            (request.result || []).forEach((row) => {
+              if (row && row.productId && Array.isArray(row.images)) {
+                cache[String(row.productId)] = row.images.filter(Boolean);
+              }
+            });
+            resolve(cache);
+          };
+          request.onerror = () => reject(request.error || new Error('Gagal membaca database foto'));
+          transaction.oncomplete = () => db.close();
+        });
+      } catch (error) {
+        console.warn('Foto lokal tidak bisa dibaca:', error);
+        return {};
+      }
+    }
+
+    async function saveProductImages(productId, images) {
+      const cleanedImages = (images || []).filter(Boolean);
+      imageStoreCache[String(productId)] = cleanedImages;
+
+      try {
+        const db = await openImageDb();
+        await new Promise((resolve, reject) => {
+          const transaction = db.transaction(IMAGE_STORE_NAME, 'readwrite');
+          const store = transaction.objectStore(IMAGE_STORE_NAME);
+          const request = store.put({ productId: String(productId), images: cleanedImages, updatedAt: Date.now() });
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error || new Error('Gagal menyimpan foto'));
+          transaction.oncomplete = () => db.close();
+          transaction.onerror = () => reject(transaction.error || new Error('Transaksi foto gagal'));
+        });
+        return true;
+      } catch (error) {
+        console.warn('Foto gagal disimpan di IndexedDB:', error);
+        return false;
+      }
+    }
+
+    async function deleteProductImages(productId) {
+      delete imageStoreCache[String(productId)];
+      try {
+        const db = await openImageDb();
+        await new Promise((resolve, reject) => {
+          const transaction = db.transaction(IMAGE_STORE_NAME, 'readwrite');
+          const store = transaction.objectStore(IMAGE_STORE_NAME);
+          const request = store.delete(String(productId));
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error || new Error('Gagal menghapus foto'));
+          transaction.oncomplete = () => db.close();
+          transaction.onerror = () => reject(transaction.error || new Error('Transaksi hapus foto gagal'));
+        });
+      } catch (error) {
+        console.warn('Foto gagal dihapus:', error);
+      }
+    }
+
+    const icons = {
+      search: '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>',
+      plus: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>',
+      arrow: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
+      trash: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4c0-.6.4-1 1-1h6c.6 0 1 .4 1 1v2"></path><path d="M19 6l-1 14c-.1.6-.5 1-1.1 1H7.1c-.6 0-1-.4-1.1-1L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>',
+      edit: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>',
+      close: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
+      store: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 2-4h16l2 4"></path><path d="M4 7v13h16V7"></path><path d="M8 21v-7h8v7"></path><path d="M2 7h20"></path></svg>',
+      whatsapp: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 21l2.1-5.5A8.5 8.5 0 1 1 21 11.5Z"></path><path d="M8.8 8.9c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.6c.1.3.1.5-.1.7l-.3.4c-.1.1-.2.3-.1.5.4.8 1 1.5 1.8 2 .2.1.4.1.5-.1l.5-.6c.2-.2.4-.3.7-.2l1.7.8c.3.1.4.3.4.6 0 .5-.3 1.2-.7 1.5-.5.4-1.1.5-1.8.3-3.1-.9-5.6-3.2-6.5-6.2-.2-.7-.1-1.3.2-1.8Z"></path></svg>',
+      info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>',
+      dollar: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path></svg>',
+      image: '<svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"></path></svg>',
+      paste: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect></svg>',
+      pizza: '<svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M15 11h.01"></path><path d="M11 15h.01"></path><path d="M16 16h.01"></path><path d="m2 16 20 6-6-20A20 20 0 0 0 2 16"></path><path d="M5.7 14.9A15.8 15.8 0 0 1 14.9 5.7"></path></svg>',
+      moon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 7.4A9 9 0 1 1 12 3Z"></path></svg>',
+      sun: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>'
+    };
+
+    function initIcons() {
+      // $('#pizzaIcon').innerHTML = icons.pizza;
+      $('#searchIcon').innerHTML = icons.search;
+      $('#plusIconHeader').innerHTML = icons.plus;
+      if ($('#arrowIcon')) $('#arrowIcon').innerHTML = icons.arrow;
+      $('#emptySearchIcon').innerHTML = icons.search;
+      $('#closeDetailBtn').innerHTML = icons.close;
+      $('#deleteDetailBtn').innerHTML = icons.trash;
+      $('#editDetailBtn').innerHTML = icons.edit;
+      $('#closeAddBtn').innerHTML = icons.close;
+      $('#closeLandingBtn').innerHTML = icons.close;
+      $('#imagePlaceholder').innerHTML = icons.image;
+      $('#pasteHint').innerHTML = icons.paste + ' Bisa drag & drop foto, CTRL+V / paste screenshot, paste beberapa URL gambar. Geser urutan foto untuk menentukan foto utama';
+      $('#plusIconSave').innerHTML = icons.plus;
+      $('#infoTitle').innerHTML = icons.info + ' Spesifikasi';
+      $('#priceTitle').innerHTML = icons.dollar + ' Informasi Harga';
+    }
+
+    function calculateMarkupAmount(costPrice, marginPercent) {
+      const cost = Number(costPrice) || 0;
+      const percent = Number(marginPercent) || 0;
+      return Math.round(cost * percent / 100);
+    }
+
+
+    function normalizePriceMode(mode) {
+      return String(mode || '').toLowerCase() === 'custom' ? 'custom' : 'margin';
+    }
+
+    function getSelectedPriceMode() {
+      return normalizePriceMode(document.querySelector('input[name="priceMode"]:checked')?.value || 'margin');
+    }
+
+    function getActualMarginPercent(costPrice, finalPrice) {
+      const cost = Number(costPrice) || 0;
+      const price = Number(finalPrice) || 0;
+      if (cost <= 0) return 0;
+      return Number((((price - cost) / cost) * 100).toFixed(1));
+    }
+
+    function formatPercent(value) {
+      const number = Number(value) || 0;
+      return Number.isInteger(number) ? String(number) : String(number).replace('.', ',');
+    }
+
+    function resolvePriceMode(product, calculatedPrice) {
+      if (product?.priceMode || product?.price_mode) return normalizePriceMode(product.priceMode || product.price_mode);
+      const custom = product?.customPrice ?? product?.custom_price;
+      const customNumber = custom === null || custom === undefined || custom === '' ? null : Number(custom);
+      if (customNumber !== null && !Number.isNaN(customNumber) && customNumber > 0 && Number(customNumber) !== Number(calculatedPrice || 0)) {
+        return 'custom';
+      }
+      return 'margin';
+    }
+
+    function resolveMarginPercent(product, costPrice, price) {
+      if (product.marginPercent !== undefined && product.marginPercent !== null && product.marginPercent !== '') {
+        return Number(product.marginPercent) || 0;
+      }
+
+      const legacyMarginPrice = Number(product.marginPrice);
+      if (costPrice > 0 && legacyMarginPrice > 0) {
+        return Number(((legacyMarginPrice / costPrice) * 100).toFixed(2));
+      }
+
+      if (costPrice > 0 && price > costPrice) {
+        return Number((((price - costPrice) / costPrice) * 100).toFixed(2));
+      }
+
+      return 0;
+    }
+
+    function migrateProduct(product) {
+      const images = Array.isArray(product.imageUrls)
+        ? product.imageUrls.filter(Boolean)
+        : [product.imageUrl].filter(Boolean);
+
+      const costPrice = Number(product.costPrice) || 0;
+      const rawPrice = Number(product.price) || 0;
+      const marginPercent = resolveMarginPercent(product, costPrice, rawPrice);
+      const marginPrice = calculateMarkupAmount(costPrice, marginPercent);
+      const calculatedPrice = costPrice + marginPrice;
+      const customRaw = product.customPrice ?? product.custom_price;
+      const customNumber = customRaw === null || customRaw === undefined || customRaw === '' ? null : Number(customRaw);
+      const priceMode = resolvePriceMode(product, calculatedPrice);
+      const finalPrice = priceMode === 'custom'
+        ? (customNumber !== null && !Number.isNaN(customNumber) ? customNumber : (rawPrice || calculatedPrice))
+        : calculatedPrice;
+
+      return {
+        ...product,
+        costPrice,
+        priceMode,
+        customPrice: priceMode === 'custom' ? finalPrice : null,
+        price: finalPrice,
+        marginPercent,
+        marginPrice,
+        calculatedPrice,
+        imageUrls: images.length ? images : [DEFAULT_IMAGE],
+        imageUrl: images[0] || DEFAULT_IMAGE
+      };
+    }
+
+    function readSavedProducts() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return null;
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : null;
+      } catch (error) {
+        console.warn('Data produk gagal dibaca:', error);
+        return null;
+      }
+    }
+
+    function loadProducts() {
+      const savedProducts = readSavedProducts();
+      if (!savedProducts) return defaultProducts.map(migrateProduct);
+      return savedProducts.map(migrateProduct);
+    }
+
+    function getRawProductImages(product) {
+      const images = Array.isArray(product?.imageUrls)
+        ? product.imageUrls.filter(Boolean)
+        : [product?.imageUrl].filter(Boolean);
+      return images.length ? images : [];
+    }
+
+    function stripImagesForStorage(product) {
+      const migrated = migrateProduct(product);
+      const copy = { ...migrated };
+      const safeImages = safeImagesForLocalStorage(product);
+      if (safeImages.length) {
+        copy.imageUrls = safeImages;
+        copy.imageUrl = safeImages[0];
+      } else {
+        delete copy.imageUrl;
+        delete copy.imageUrls;
+      }
+      return copy;
+    }
+
+    function cleanupOldStorageKeys() {
+      OLD_STORAGE_KEYS.forEach((key) => {
+        try { localStorage.removeItem(key); } catch (error) { console.warn('Gagal membersihkan data lama:', error); }
+      });
+    }
+
+    function deleteDatabaseByName(dbName) {
+      return new Promise((resolve) => {
+        if (!('indexedDB' in window) || !dbName) {
+          resolve();
+          return;
+        }
+        try {
+          const request = indexedDB.deleteDatabase(dbName);
+          request.onsuccess = () => resolve();
+          request.onerror = () => resolve();
+          request.onblocked = () => resolve();
+        } catch (error) {
+          console.warn('Gagal reset database foto:', error);
+          resolve();
+        }
+      });
+    }
+
+    async function resetFreshWebsiteOnce() {
+      try {
+        if (localStorage.getItem(FRESH_RESET_KEY) === '1') return;
+        cleanupOldStorageKeys();
+        localStorage.removeItem(STORAGE_KEY);
+        await Promise.all(OLD_IMAGE_DB_NAMES.map(deleteDatabaseByName));
+        await deleteDatabaseByName(IMAGE_DB_NAME);
+        localStorage.setItem(FRESH_RESET_KEY, '1');
+      } catch (error) {
+        console.warn('Reset awal gagal, aplikasi tetap dibuka:', error);
+      }
+    }
+
+    function saveProducts() {
+      try {
+        cleanupOldStorageKeys();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(products.map(stripImagesForStorage)));
+        return true;
+      } catch (error) {
+        try {
+          cleanupOldStorageKeys();
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(products.map(stripImagesForStorage)));
+          return true;
+        } catch (secondError) {
+          alert('Produk belum tersimpan karena memori browser masih penuh. Foto sekarang sudah dipisah dari data produk, tapi browser masih menolak penyimpanan. Coba hapus beberapa data lama/browser cache, lalu simpan ulang.');
+          return false;
+        }
+      }
+    }
+
+    async function migrateExistingImagesToIndexedDB() {
+      const jobs = products.map(async (product) => {
+        const rawImages = getRawProductImages(product);
+        const key = String(product.id);
+        if (rawImages.length && !imageStoreCache[key]) {
+          await saveProductImages(key, rawImages);
+        }
+      });
+      await Promise.all(jobs);
+    }
+
+    function applyTheme(theme) {
+      const selected = theme === 'dark' ? 'dark' : 'light';
+      document.body.dataset.theme = selected;
+      localStorage.setItem(THEME_KEY, selected);
+      $('#themeIcon').innerHTML = selected === 'dark' ? icons.sun : icons.moon;
+      $('#themeLabel').textContent = selected === 'dark' ? 'Light' : 'Dark';
+      $('#themeToggleBtn').setAttribute('title', selected === 'dark' ? 'Ganti ke Light Mode' : 'Ganti ke Dark Mode');
+    }
+
+    function toggleTheme() {
+      const current = document.body.dataset.theme === 'dark' ? 'dark' : 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    function formatRupiah(number) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+      }).format(Number(number) || 0);
+    }
+
+    function safeText(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function normalizeWhatsAppNumber(value) {
+      let digits = String(value || '').replace(/[^0-9]/g, '');
+      if (!digits) return '';
+      if (digits.startsWith('00')) digits = digits.slice(2);
+      if (digits.startsWith('0')) digits = `62${digits.slice(1)}`;
+      if (digits.startsWith('8')) digits = `62${digits}`;
+      return digits;
+    }
+
+    function getWhatsAppUrl(value) {
+      const number = normalizeWhatsAppNumber(value);
+      if (!number) return '';
+      return `https://wa.me/${number}`;
+    }
+
+    function getVendorPhoneText(value) {
+      return String(value || '').trim() || 'Nomor WA belum diisi';
+    }
+
+    function isVendorUnlocked() {
+      return vendorAccessUnlocked === true;
+    }
+
+    function isEditMode() {
+      return editingId !== null && editingId !== undefined;
+    }
+
+    function hashVendorPassword(value) {
+      const text = `pustakaorder-vendor::${String(value || '')}`;
+      let hash = 2166136261;
+      for (let i = 0; i < text.length; i += 1) {
+        hash ^= text.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return (hash >>> 0).toString(16);
+    }
+
+    function hasVendorPassword() {
+      return true;
+    }
+
+    function verifyVendorPassword(password) {
+      return VENDOR_FIXED_PASSWORD_HASH === hashVendorPassword(password);
+    }
+
+    function saveVendorPassword() {
+      return false;
+    }
+
+    function unlockVendorAccess() {
+      vendorAccessUnlocked = true;
+      sessionStorage.setItem(VENDOR_ACCESS_SESSION_KEY, '1');
+      updateVendorGateUI();
+      renderProducts();
+      if (selectedId) openDetailModal(selectedId);
+    }
+
+    function lockVendorAccess() {
+      vendorAccessUnlocked = false;
+      sessionStorage.removeItem(VENDOR_ACCESS_SESSION_KEY);
+      updateVendorGateUI();
+    }
+
+    function updateVendorGateUI() {
+      const unlocked = isVendorUnlocked();
+      const editing = isEditMode();
+      const showVendorFields = !editing || unlocked;
+
+      document.body.classList.toggle('full-access', unlocked);
+
+      const button = $('#vendorAccessBtn');
+      if (button) {
+        button.textContent = unlocked ? '🔓 Mode Admin Aktif' : '🔒 Masuk Admin';
+        button.classList.toggle('unlocked', unlocked);
+        button.title = unlocked
+          ? 'Klik untuk keluar dari mode divisi'
+          : 'Masukkan password divisi untuk tambah/edit/hapus dan melihat modal/vendor';
+      }
+
+      const vendorField = $('#vendor')?.closest('.field');
+      const vendorPhoneField = $('#vendorPhone')?.closest('.field');
+      [vendorField, vendorPhoneField].forEach((field) => {
+        if (!field) return;
+        field.classList.add('vendor-gated-field');
+        field.classList.toggle('is-hidden', !showVendorFields);
+      });
+
+      const note = $('#vendorFormLockNote');
+      if (note) note.classList.toggle('is-visible', editing && !unlocked);
+    }
+
+    function setOrChangeVendorPassword() {
+      alert('Password vendor sudah dibuat tetap dan tidak bisa diubah dari website.');
+      return false;
+    }
+
+    function toggleVendorAccess() {
+      if (isVendorUnlocked()) {
+        lockVendorAccess();
+        renderProducts();
+        if (selectedId) openDetailModal(selectedId);
+        return;
+      }
+
+      const password = prompt('Masukkan password divisi untuk membuka full access:');
+      if (password === null) return;
+
+      if (verifyVendorPassword(password)) {
+        unlockVendorAccess();
+        alert('Mode divisi aktif. Sekarang bro bisa tambah/edit/hapus, lihat modal, vendor, dan nomor WA.');
+      } else {
+        alert('Password salah. Website tetap dalam mode customer.');
+      }
+    }
+
+
+    function defaultLandingImage(number) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200"><rect width="900" height="1200" fill="#ffffff"/><rect x="24" y="24" width="852" height="1152" fill="none" stroke="#444" stroke-width="4"/><text x="450" y="560" text-anchor="middle" font-family="Arial, sans-serif" font-size="64" font-weight="800" fill="#333">FOTO ${number}</text><text x="450" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#777">Edit di Mode Divisi</text></svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    function normalizeLandingImages(images) {
+      const cleaned = Array.isArray(images) ? images.filter(Boolean).slice(0, 5) : [];
+      while (cleaned.length < 5) cleaned.push(DEFAULT_LANDING_IMAGES[cleaned.length] || DEFAULT_IMAGE);
+      return cleaned;
+    }
+
+    function readLandingLocal() {
+      try {
+        const saved = localStorage.getItem(LANDING_STORAGE_KEY);
+        if (!saved) return null;
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : null;
+      } catch (error) {
+        console.warn('Landing lokal gagal dibaca:', error);
+        return null;
+      }
+    }
+
+    function saveLandingLocal(images) {
+      try {
+        localStorage.setItem(LANDING_STORAGE_KEY, JSON.stringify(normalizeLandingImages(images)));
+      } catch (error) {
+        console.warn('Landing lokal gagal disimpan:', error);
+      }
+    }
+
+    function landingIndex(index) {
+      const length = Math.max(1, landingImages.length || 5);
+      return ((index % length) + length) % length;
+    }
+
+    function getLandingOffset(index) {
+      const length = Math.max(1, landingImages.length || 5);
+      let offset = landingIndex(index) - landingIndex(landingActiveIndex);
+      if (offset > length / 2) offset -= length;
+      if (offset < -length / 2) offset += length;
+      return offset;
+    }
+
+    function getLandingPositionClass(offset) {
+      if (offset === 0) return 'pos-center';
+      if (offset === -1) return 'pos-left';
+      if (offset === 1) return 'pos-right';
+      if (offset === -2) return 'pos-left-far';
+      if (offset === 2) return 'pos-right-far';
+      return offset < 0 ? 'pos-left-far' : 'pos-right-far';
+    }
+
+    function isDefaultLandingImage(src) {
+      return String(src || '').startsWith('data:image/svg+xml') && String(src || '').includes('FOTO%20');
+    }
+
+    function hasRealLandingImages(images) {
+      return normalizeLandingImages(images).some((src) => src && !isDefaultLandingImage(src) && src !== DEFAULT_IMAGE);
+    }
+
+    function createLandingFrame(index, src) {
+      const button = document.createElement('button');
+      button.className = 'landing-frame';
+      button.type = 'button';
+      button.dataset.landingIndex = String(index);
+      button.setAttribute('aria-label', `Tampilkan foto landing ${index + 1}`);
+
+      const image = document.createElement('img');
+      image.src = src || DEFAULT_IMAGE;
+      image.alt = `Foto landing ${index + 1}`;
+      image.onerror = () => { image.src = DEFAULT_IMAGE; };
+      button.appendChild(image);
+      return button;
+    }
+
+    function renderLandingCarousel(options = {}) {
+      const stage = $('#landingStage');
+      const dots = $('#landingDots');
+      if (!stage || !dots) return;
+
+      landingImages = normalizeLandingImages(landingImages.length ? landingImages : (readLandingLocal() || DEFAULT_LANDING_IMAGES));
+      landingActiveIndex = landingIndex(landingActiveIndex);
+      const shouldRebuild = stage.children.length !== landingImages.length;
+
+      if (shouldRebuild) {
+        stage.innerHTML = '';
+        landingImages.forEach((src, index) => stage.appendChild(createLandingFrame(index, src)));
+      }
+
+      landingImages.forEach((src, index) => {
+        let frame = stage.querySelector(`[data-landing-index="${index}"]`);
+        if (!frame) {
+          frame = createLandingFrame(index, src);
+          stage.appendChild(frame);
+        }
+
+        const image = frame.querySelector('img');
+        if (image && image.src !== src) image.src = src || DEFAULT_IMAGE;
+        const positionClass = getLandingPositionClass(getLandingOffset(index));
+        frame.className = `landing-frame ${positionClass}`;
+        frame.dataset.landingIndex = String(index);
+        frame.setAttribute('aria-label', `Tampilkan foto landing ${index + 1}`);
+      });
+
+      dots.innerHTML = landingImages.map((_, index) => `
+        <button class="landing-dot ${index === landingActiveIndex ? 'active' : ''}" type="button" data-landing-dot="${index}" aria-label="Ke foto landing ${index + 1}"></button>
+      `).join('');
+
+      if (options.animate) {
+        stage.classList.remove('is-animating');
+        void stage.offsetWidth;
+        stage.classList.add('is-animating');
+        window.clearTimeout(stage._landingAnimationTimer);
+        stage._landingAnimationTimer = window.setTimeout(() => {
+          stage.classList.remove('is-animating');
+        }, 760);
+      }
+    }
+
+    function setLandingActive(index, animate = true) {
+      const nextIndex = landingIndex(index);
+      if (nextIndex === landingActiveIndex) return;
+      landingActiveIndex = nextIndex;
+      renderLandingCarousel({ animate });
+    }
+
+    function moveLanding(direction) {
+      setLandingActive(landingActiveIndex + direction, true);
+    }
+
+    async function saveLandingOnline(images) {
+      if (!ensureSupabaseReady()) throw new Error('Supabase config belum valid');
+      const safeImages = normalizeLandingImages(images);
+      const payload = {
+        id: 'main',
+        images: safeImages,
+        updated_at: new Date().toISOString()
+      };
+
+      try {
+        await supabaseJsonRequest(`/${LANDING_SUPABASE_TABLE}?on_conflict=id`, {
+          method: 'POST',
+          headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
+          body: [payload]
+        });
+      } catch (upsertError) {
+        console.warn('Upsert landing gagal, coba fallback PATCH/POST:', upsertError);
+        const existing = await supabaseJsonRequest(`/${LANDING_SUPABASE_TABLE}?id=eq.main&select=id&limit=1`);
+        if (Array.isArray(existing) && existing.length) {
+          await supabaseJsonRequest(`/${LANDING_SUPABASE_TABLE}?id=eq.main`, {
+            method: 'PATCH',
+            headers: { Prefer: 'return=minimal' },
+            body: { images: safeImages, updated_at: payload.updated_at }
+          });
+        } else {
+          await supabaseJsonRequest(`/${LANDING_SUPABASE_TABLE}`, {
+            method: 'POST',
+            headers: { Prefer: 'return=minimal' },
+            body: payload
+          });
+        }
+      }
+
+      const verify = await supabaseJsonRequest(`/${LANDING_SUPABASE_TABLE}?id=eq.main&select=images,updated_at&limit=1`);
+      const row = Array.isArray(verify) ? verify[0] : null;
+      if (!row || !Array.isArray(row.images) || !row.images.length) {
+        throw new Error('Data landing belum terbaca dari Supabase setelah simpan. Cek RLS/policy landing_settings.');
+      }
+      return normalizeLandingImages(row.images);
+    }
+
+    async function loadLandingSlides() {
+      const localSlides = normalizeLandingImages(readLandingLocal() || DEFAULT_LANDING_IMAGES);
+      landingImages = localSlides;
+      landingActiveIndex = landingIndex(landingActiveIndex);
+      renderLandingCarousel();
+
+      if (!ensureSupabaseReady()) return;
+
+      try {
+        const data = await supabaseJsonRequest(`/${LANDING_SUPABASE_TABLE}?id=eq.main&select=images,updated_at&limit=1`);
+        const row = Array.isArray(data) ? data[0] : null;
+
+        if (row && Array.isArray(row.images) && row.images.length && hasRealLandingImages(row.images)) {
+          landingImages = normalizeLandingImages(row.images);
+          landingActiveIndex = landingIndex(landingActiveIndex);
+          saveLandingLocal(landingImages);
+          renderLandingCarousel();
+          console.info('Landing slider online dimuat dari Supabase:', row.updated_at || '');
+          return;
+        }
+
+        console.info('Landing Supabase masih kosong. Simpan foto dari Mode Admin agar muncul di perangkat lain.');
+      } catch (error) {
+        console.warn('Landing Supabase belum siap / SQL belum dijalankan:', error);
+      }
+    }
+
+    function openLandingModal() {
+      if (!isVendorUnlocked()) {
+        alert('Edit foto landing hanya untuk Mode Divisi. Masukkan password divisi dulu.');
+        return;
+      }
+      landingEditorImages = normalizeLandingImages(landingImages);
+      renderLandingEditor();
+      $('#landingModal').classList.add('open');
+      $('#landingModal').setAttribute('aria-hidden', 'false');
+    }
+
+    function closeLandingModal() {
+      $('#landingModal').classList.remove('open');
+      $('#landingModal').setAttribute('aria-hidden', 'true');
+    }
+
+    function renderLandingEditor() {
+      const grid = $('#landingEditorGrid');
+      if (!grid) return;
+      landingEditorImages = normalizeLandingImages(landingEditorImages);
+      grid.innerHTML = landingEditorImages.map((src, index) => `
+        <div class="landing-edit-slot" data-landing-slot="${index}">
+          <img class="landing-edit-preview" src="${safeText(src)}" alt="Preview landing ${index + 1}" onerror="this.src='${DEFAULT_IMAGE}'" />
+          <div class="landing-edit-content">
+            <p class="landing-edit-title">Foto Landing ${index + 1}${index === landingActiveIndex ? ' • Tengah saat ini' : ''}</p>
+            <div class="landing-edit-row">
+              <input class="landing-edit-input" type="text" data-landing-url-input="${index}" placeholder="Tempel URL gambar" value="${/^https?:\/\//i.test(String(src)) ? safeText(src) : ''}" />
+              <label class="landing-small-action" for="landingFile${index}">Upload</label>
+              <button class="landing-small-action" type="button" data-landing-apply-url="${index}">Pakai URL</button>
+              <input class="landing-file-input" id="landingFile${index}" type="file" accept="image/*" data-landing-file="${index}" />
+            </div>
+            <p class="landing-helper">Foto nomor ${index + 1}. Setelah disimpan, foto akan ikut tampil di slider landing customer.</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function setLandingImageFromFile(index, file) {
+      if (!file) return;
+      const dataUrl = await fileToImageData(file);
+      if (!dataUrl) return;
+      landingEditorImages[index] = dataUrl;
+      renderLandingEditor();
+    }
+
+    function applyLandingUrl(index) {
+      const input = document.querySelector(`[data-landing-url-input="${index}"]`);
+      const value = input?.value?.trim() || '';
+      if (!/^https?:\/\//i.test(value)) {
+        alert('URL foto harus diawali http:// atau https://');
+        input?.focus();
+        return;
+      }
+      landingEditorImages[index] = value;
+      renderLandingEditor();
+    }
+
+    async function uploadLandingImages(images) {
+      const finalImages = normalizeLandingImages(images);
+      const uploaded = [];
+      for (let index = 0; index < finalImages.length; index += 1) {
+        const src = finalImages[index];
+        if (/^https?:\/\//i.test(String(src))) {
+          uploaded.push(src);
+          continue;
+        }
+        if (isInlineImage(src)) {
+          const response = await fetch(src);
+          const blob = await response.blob();
+          const extension = blob.type.includes('png') ? 'png' : 'jpg';
+          const path = `landing/${Date.now()}-${index}-${uploadId()}.${extension}`;
+          const publicUrl = await supabaseStorageUpload(path, blob);
+          uploaded.push(publicUrl || DEFAULT_LANDING_IMAGES[index] || DEFAULT_IMAGE);
+          continue;
+        }
+        uploaded.push(src || DEFAULT_LANDING_IMAGES[index] || DEFAULT_IMAGE);
+      }
+      return normalizeLandingImages(uploaded);
+    }
+
+    async function saveLandingForm(event) {
+      event.preventDefault();
+      if (!isVendorUnlocked()) {
+        alert('Simpan foto landing hanya bisa di Mode Divisi.');
+        return;
+      }
+
+      const saveButton = event.currentTarget.querySelector('button[type="submit"]');
+      const oldText = saveButton?.textContent || 'Simpan Foto Landing';
+
+      try {
+        if (saveButton) {
+          saveButton.disabled = true;
+          saveButton.textContent = 'Upload foto ke Supabase...';
+        }
+
+        const uploadedImages = await uploadLandingImages(landingEditorImages);
+        landingImages = normalizeLandingImages(uploadedImages);
+        saveLandingLocal(landingImages);
+        renderLandingCarousel({ animate: true });
+
+        if (saveButton) saveButton.textContent = 'Simpan data online...';
+        const onlineImages = await saveLandingOnline(landingImages);
+
+        landingImages = normalizeLandingImages(onlineImages);
+        saveLandingLocal(landingImages);
+        renderLandingCarousel({ animate: true });
+
+        alert('Foto landing berhasil tersimpan ONLINE. Sekarang buka website ini di perangkat lain, foto slider akan ikut muncul.');
+        closeLandingModal();
+      } catch (error) {
+        console.error('Landing gagal disimpan online:', error);
+        const message = getSupabaseErrorMessage(error);
+        alert(`Foto landing belum tersimpan online. Detail: ${message}\n\nPastikan SQL v10 sudah di-run, tabel landing_settings ada, bucket product-images public, dan policy Storage aktif.`);
+      } finally {
+        if (saveButton) {
+          saveButton.disabled = false;
+          saveButton.textContent = oldText;
+        }
+      }
+    }
+
+    function getProductSalePrice(product) {
+      const costPrice = Number(product.costPrice) || 0;
+      const marginPercent = Number(product.marginPercent) || 0;
+      const marginPrice = calculateMarkupAmount(costPrice, marginPercent);
+      const calculatedPrice = costPrice + marginPrice;
+      const priceMode = normalizePriceMode(product.priceMode);
+      return priceMode === 'custom' ? (Number(product.price) || calculatedPrice) : calculatedPrice;
+    }
+
+    function isInlineImage(src) {
+      return /^data:image\//i.test(String(src || ''));
+    }
+
+    function safeImagesForLocalStorage(product) {
+      return getRawProductImages(product).filter((src) => !isInlineImage(src));
+    }
+
+    function getProductImages(product) {
+      const cachedImages = imageStoreCache[String(product?.id)] || [];
+      if (cachedImages.length) return cachedImages;
+
+      const images = getRawProductImages(product);
+      return images.length ? images : [DEFAULT_IMAGE];
+    }
+    function getFilteredProducts() {
+      const keyword = $('#searchInput').value.trim().toLowerCase();
+      if (!keyword) return products;
+      return products.filter((product) => {
+        const searchable = [product.name, product.size, product.specs, product.price, product.costPrice, product.marginPercent, product.marginPrice];
+        if (isVendorUnlocked()) searchable.push(product.vendor, product.vendorPhone);
+        return searchable
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(keyword));
+      });
+    }
+
+    function renderProducts() {
+      const grid = $('#productGrid');
+      const emptyState = $('#emptyState');
+      const keyword = $('#searchInput').value.trim();
+      const filtered = getFilteredProducts();
+      const unlocked = isVendorUnlocked();
+
+      $('#resultText').textContent = `${filtered.length} produk ditemukan${keyword ? ` untuk "${keyword}"` : ''}`;
+
+      if (filtered.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        grid.innerHTML = '';
+        return;
+      }
+
+      grid.style.display = 'grid';
+      emptyState.style.display = 'none';
+
+      grid.innerHTML = filtered.map((product) => {
+        const images = getProductImages(product);
+        const selectedPrice = getProductSalePrice(product);
+        const waUrl = getWhatsAppUrl(product.vendorPhone);
+        const vendorPhoneHtml = waUrl
+          ? `<a class="wa-link card-wa-link" href="${safeText(waUrl)}" target="_blank" rel="noopener" title="Chat WhatsApp vendor">${icons.whatsapp} ${safeText(getVendorPhoneText(product.vendorPhone))}</a>`
+          : `<span class="vendor-phone-empty">${icons.whatsapp} Nomor WA belum diisi</span>`;
+        const vendorInfoHtml = unlocked
+          ? `<p class="card-vendor">${icons.store} ${safeText(product.vendor || 'Vendor belum diisi')}</p><p class="card-vendor-contact">${vendorPhoneHtml}</p>`
+          : '';
+        const actionButtonsHtml = unlocked
+          ? `<button class="edit-btn" type="button" data-edit-id="${product.id}" title="Edit produk" aria-label="Edit ${safeText(product.name)}">${icons.edit}</button>
+             <button class="delete-btn" type="button" data-delete-id="${product.id}" title="Hapus produk" aria-label="Hapus ${safeText(product.name)}">${icons.trash}</button>`
+          : '';
+
+        return `
+          <article class="card" data-id="${product.id}">
+            <div class="card-image-wrap">
+              <span class="badge">${images.length > 1 ? `${images.length} FOTO` : (Number(product.id) % 2 === 0 ? 'NEW' : 'HOT')}</span>
+              ${actionButtonsHtml}
+              <img src="${safeText(images[0])}" alt="${safeText(product.name)}" loading="lazy" onerror="this.src='${DEFAULT_IMAGE}'" />
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h4 title="${safeText(product.name)}">${safeText(product.name)}</h4>
+              </div>
+              <div class="card-info-row">
+                <div class="card-meta-left">
+                  <p class="card-size">Ukuran: ${safeText(product.size)}</p>
+                  ${vendorInfoHtml}
+                </div>
+                <strong class="card-price-inline">${formatRupiah(selectedPrice)}</strong>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function setFormMode(mode) {
+      const isEdit = mode === 'edit';
+      $('#formTitle').textContent = isEdit ? 'Edit Order / Produk' : 'Tambah Order / Produk Baru';
+      $('#saveBtnText').textContent = isEdit ? 'Simpan Perubahan Produk' : 'Simpan ke Perpustakaan';
+      $('#plusIconSave').innerHTML = isEdit ? icons.edit : icons.plus;
+    }
+
+    function showProductForm() {
+      $('#addModal').classList.add('open');
+      $('#addModal').setAttribute('aria-hidden', 'false');
+      setTimeout(() => $('#name').focus(), 50);
+    }
+
+    function openAddModal() {
+      if (!isVendorUnlocked()) {
+        toggleVendorAccess();
+        if (!isVendorUnlocked()) return;
+      }
+      editingId = null;
+      resetForm();
+      setFormMode('add');
+      updateVendorGateUI();
+      showProductForm();
+    }
+
+    function openEditModal(productId) {
+      if (!isVendorUnlocked()) {
+        toggleVendorAccess();
+        if (!isVendorUnlocked()) return;
+      }
+      const product = products.find((item) => String(item.id) === String(productId));
+      if (!product) return;
+
+      editingId = product.id;
+      resetForm();
+      setFormMode('edit');
+
+      $('#name').value = product.name || '';
+      $('#vendor').value = product.vendor || '';
+      $('#vendorPhone').value = product.vendorPhone || '';
+      $('#size').value = product.size || '';
+      $('#specs').value = product.specs || '';
+
+      const costPrice = Number(product.costPrice) || 0;
+      const marginPercent = Number(product.marginPercent) || 0;
+      const marginPrice = calculateMarkupAmount(costPrice, marginPercent);
+      const calculatedPrice = costPrice + marginPrice;
+      const priceMode = normalizePriceMode(product.priceMode);
+      const finalPrice = Number(product.price) || calculatedPrice;
+
+      $('#costPrice').value = costPrice || '';
+      $('#marginPercent').value = marginPercent;
+      $('#marginRange').value = Math.min(marginPercent, Number($('#marginRange').max || 300));
+      $('#calculatedPrice').value = calculatedPrice || '';
+      $('#price').value = priceMode === 'custom' ? (finalPrice || '') : '';
+      priceTouched = priceMode === 'custom';
+      setPriceMode(priceMode);
+
+      imageDataList = getProductImages(product).filter(Boolean);
+      renderPreviewImages();
+      closeDetailModal();
+      updateVendorGateUI();
+      showProductForm();
+    }
+
+    function closeAddModal() {
+      $('#addModal').classList.remove('open');
+      $('#addModal').setAttribute('aria-hidden', 'true');
+      resetForm();
+      editingId = null;
+      setFormMode('add');
+      updateVendorGateUI();
+    }
+
+    function renderDetailThumbs(images, activeIndex = 0) {
+      const thumbs = $('#detailThumbs');
+      if (images.length <= 1) {
+        thumbs.innerHTML = '';
+        thumbs.style.display = 'none';
+        return;
+      }
+
+      thumbs.style.display = 'flex';
+      thumbs.innerHTML = images.map((src, index) => `
+        <button class="detail-thumb ${index === activeIndex ? 'active' : ''}" type="button" data-thumb-index="${index}" aria-label="Lihat foto ${index + 1}">
+          <img src="${safeText(src)}" alt="Foto ${index + 1}" onerror="this.src='${DEFAULT_IMAGE}'" />
+        </button>
+      `).join('');
+    }
+
+    function showDetailImage(product, imageIndex = 0) {
+      const images = getProductImages(product);
+      const src = images[imageIndex] || images[0] || DEFAULT_IMAGE;
+      $('#detailImage').src = src;
+      $('#detailImage').alt = product.name || 'Foto produk';
+      renderDetailThumbs(images, imageIndex);
+    }
+
+    function openDetailModal(productId) {
+      const product = products.find((item) => String(item.id) === String(productId));
+      if (!product) return;
+      selectedId = product.id;
+
+      const costPrice = Number(product.costPrice) || 0;
+      const marginPercent = Number(product.marginPercent) || 0;
+      const marginPrice = calculateMarkupAmount(costPrice, marginPercent);
+      const calculatedPrice = costPrice + marginPrice;
+      const priceMode = normalizePriceMode(product.priceMode);
+      const selectedPrice = priceMode === 'custom' ? (Number(product.price) || calculatedPrice) : calculatedPrice;
+      const profit = selectedPrice - costPrice;
+      const displayedMarginPercent = priceMode === 'custom' ? getActualMarginPercent(costPrice, selectedPrice) : marginPercent;
+      const displayedMarginAmount = priceMode === 'custom' ? profit : marginPrice;
+
+      $('#detailName').textContent = product.name || '-';
+      $('#detailSize').textContent = `Ukuran: ${product.size || '-'}`;
+      const vendorPill = $('#detailVendor');
+      const detailPhone = $('#detailVendorPhone');
+      if (isVendorUnlocked()) {
+        vendorPill.style.display = 'inline-flex';
+        vendorPill.classList.remove('vendor-lock-pill');
+        vendorPill.innerHTML = icons.store + ' ' + safeText(product.vendor || 'Vendor belum diisi');
+        const detailWaUrl = getWhatsAppUrl(product.vendorPhone);
+        if (detailWaUrl) {
+          detailPhone.style.display = 'inline-flex';
+          detailPhone.href = detailWaUrl;
+          detailPhone.classList.remove('disabled');
+          detailPhone.innerHTML = icons.whatsapp + ' WA: ' + safeText(getVendorPhoneText(product.vendorPhone));
+        } else {
+          detailPhone.style.display = 'none';
+          detailPhone.removeAttribute('href');
+        }
+      } else {
+        vendorPill.style.display = 'none';
+        vendorPill.classList.add('vendor-lock-pill');
+        detailPhone.style.display = 'none';
+        detailPhone.removeAttribute('href');
+      }
+      $('#detailSpecs').textContent = product.specs || '-';
+      $('#detailPrice').textContent = formatRupiah(selectedPrice);
+      $('#detailCost').textContent = formatRupiah(costPrice);
+      $('#detailMargin').textContent = `${formatPercent(displayedMarginPercent)}% (${formatRupiah(displayedMarginAmount)})`;
+      $('#detailProfit').textContent = formatRupiah(profit);
+      $('#detailImageWrap').className = 'detail-img-wrap';
+      showDetailImage(product, 0);
+
+      $('#detailModal').classList.add('open');
+      $('#detailModal').setAttribute('aria-hidden', 'false');
+    }
+
+    function closeDetailModal() {
+      $('#detailModal').classList.remove('open');
+      $('#detailModal').setAttribute('aria-hidden', 'true');
+      selectedId = null;
+    }
+
+    async function deleteProductLocalLegacy(productId) {
+      const product = products.find((item) => String(item.id) === String(productId));
+      const confirmed = confirm(`Hapus produk "${product?.name || 'ini'}"?`);
+      if (!confirmed) return;
+
+      products = products.filter((item) => String(item.id) !== String(productId));
+      await deleteProductImages(productId);
+      saveProducts();
+      renderProducts();
+
+      if (selectedId && String(selectedId) === String(productId)) {
+        closeDetailModal();
+      }
+    }
+
+    function resetForm() {
+      $('#productForm').reset();
+      $('#marginPercent').value = 0;
+      $('#marginRange').value = 0;
+      imageDataList = [];
+      priceTouched = false;
+      $('#imageUrl').value = '';
+      setPriceMode('margin');
+      updateVendorGateUI();
+      renderPreviewImages();
+      updateCalculatedPrice();
+    }
+
+    function parseImageUrls(text) {
+      return String(text || '')
+        .split(/[\n,\s]+/)
+        .map((item) => item.trim())
+        .filter((item) => /^https?:\/\//i.test(item));
+    }
+
+    function addImages(images) {
+      const cleaned = images.filter(Boolean);
+      if (!cleaned.length) return;
+      const maxPhotos = 12;
+      const combined = [...imageDataList, ...cleaned];
+      imageDataList = combined.slice(0, maxPhotos);
+      if (combined.length > maxPhotos) {
+        alert(`Maksimal ${maxPhotos} foto per produk supaya aplikasi tetap ringan, bro.`);
+      }
+      renderPreviewImages();
+    }
+
+    function addUrlImagesFromInput() {
+      const urls = parseImageUrls($('#imageUrl').value);
+      if (!urls.length) return;
+      addImages(urls);
+      $('#imageUrl').value = '';
+    }
+
+    function removeImage(index) {
+      imageDataList = imageDataList.filter((_, itemIndex) => itemIndex !== index);
+      renderPreviewImages();
+    }
+
+    function renderPreviewImages() {
+      const list = $('#previewList');
+      const count = $('#previewCount');
+
+      if (!imageDataList.length) {
+        list.style.display = 'none';
+        list.innerHTML = '';
+        count.textContent = 'Belum ada foto dipilih';
+        $('#imagePlaceholder').style.display = 'block';
+        return;
+      }
+
+      $('#imagePlaceholder').style.display = 'none';
+      list.style.display = 'grid';
+      count.textContent = `${imageDataList.length} foto siap disimpan`;
+      list.innerHTML = imageDataList.map((src, index) => `
+        <div class="preview-item" draggable="true" data-image-index="${index}" title="Drag untuk atur urutan foto">
+          <img draggable="false" src="${safeText(src)}" alt="Preview foto ${index + 1}" onerror="this.src='${DEFAULT_IMAGE}'" />
+          ${index === 0 ? '<span class="preview-main-badge">UTAMA</span>' : ''}
+          <button class="preview-remove" type="button" data-remove-image="${index}" aria-label="Hapus foto ${index + 1}">${icons.close}</button>
+        </div>
+      `).join('');
+    }
+
+    function reorderImage(fromIndex, toIndex) {
+      const from = Number(fromIndex);
+      const to = Number(toIndex);
+      if (!Number.isInteger(from) || !Number.isInteger(to)) return;
+      if (from < 0 || to < 0 || from >= imageDataList.length || to >= imageDataList.length || from === to) return;
+      const [movedImage] = imageDataList.splice(from, 1);
+      imageDataList.splice(to, 0, movedImage);
+      draggedImageIndex = null;
+      renderPreviewImages();
+    }
+
+    function isInternalPreviewReorder(event) {
+      const types = Array.from(event.dataTransfer?.types || []);
+      return draggedImageIndex !== null || types.includes('application/x-pustakaorder-image-reorder');
+    }
+
+    async function handleImageDrop(event) {
+      if (isInternalPreviewReorder(event)) {
+        event.preventDefault();
+        event.stopPropagation();
+        $('#pasteZone').classList.remove('is-dragover');
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      $('#pasteZone').classList.remove('is-dragover');
+      const files = Array.from(event.dataTransfer?.files || []).filter((file) => file.type && file.type.startsWith('image/'));
+      if (files.length) await filesToImageData(files);
+    }
+
+    function fileToImageData(file) {
+      return new Promise((resolve) => {
+        if (!file || !file.type.startsWith('image/')) {
+          resolve(null);
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const originalData = reader.result;
+          const image = new Image();
+          image.onload = () => {
+            try {
+              const maxSide = 900;
+              const scale = Math.min(1, maxSide / image.width, maxSide / image.height);
+              const canvas = document.createElement('canvas');
+              canvas.width = Math.max(1, Math.round(image.width * scale));
+              canvas.height = Math.max(1, Math.round(image.height * scale));
+              const ctx = canvas.getContext('2d');
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL('image/jpeg', 0.74));
+            } catch (error) {
+              resolve(originalData);
+            }
+          };
+          image.onerror = () => resolve(originalData);
+          image.src = originalData;
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function filesToImageData(files) {
+      const dataList = await Promise.all(Array.from(files || []).map(fileToImageData));
+      addImages(dataList.filter(Boolean));
+    }
+
+    async function handlePaste(event) {
+      if (event.defaultPrevented) return;
+      const clipboardItems = event.clipboardData?.items || [];
+      const imageFiles = [];
+
+      for (let i = 0; i < clipboardItems.length; i += 1) {
+        const item = clipboardItems[i];
+        if (item.type && item.type.startsWith('image/')) {
+          imageFiles.push(item.getAsFile());
+        }
+      }
+
+      if (imageFiles.length) {
+        event.preventDefault();
+        event.stopPropagation();
+        await filesToImageData(imageFiles);
+        return;
+      }
+
+      const text = event.clipboardData?.getData('text/plain')?.trim();
+      const urls = parseImageUrls(text);
+      if (urls.length) {
+        event.preventDefault();
+        event.stopPropagation();
+        addImages(urls);
+      }
+    }
+
+    function setPriceMode(mode) {
+      const selected = normalizePriceMode(mode);
+      document.querySelectorAll('input[name="priceMode"]').forEach((input) => {
+        input.checked = input.value === selected;
+      });
+      updatePriceModeUI();
+    }
+
+    function updatePriceModeUI() {
+      const selected = getSelectedPriceMode();
+      const customField = $('#customPriceField');
+      const priceInput = $('#price');
+      const calculated = Number($('#calculatedPrice').value || 0);
+
+      document.querySelectorAll('[data-price-mode-option]').forEach((option) => {
+        option.classList.toggle('active', option.dataset.priceModeOption === selected);
+      });
+
+      if (selected === 'custom') {
+        customField.classList.remove('disabled-soft');
+        priceInput.disabled = false;
+        priceInput.required = true;
+        priceInput.placeholder = 'Isi harga jual custom';
+        if (!priceInput.value && calculated > 0) priceInput.value = calculated;
+      } else {
+        customField.classList.add('disabled-soft');
+        priceInput.disabled = true;
+        priceInput.required = false;
+        priceInput.value = '';
+        priceInput.placeholder = 'Tidak dipakai karena memilih harga dari margin';
+        priceTouched = false;
+      }
+    }
+
+    function updateCalculatedPrice(forcePrice = false) {
+      const cost = Number($('#costPrice').value || 0);
+      const marginPercent = Number($('#marginPercent').value || 0);
+      const calculated = cost + calculateMarkupAmount(cost, marginPercent);
+      $('#calculatedPrice').value = calculated || '';
+
+      if (getSelectedPriceMode() === 'custom') {
+        if (forcePrice || (!priceTouched && !$('#price').value)) {
+          $('#price').value = calculated || '';
+        }
+      } else {
+        $('#price').value = '';
+      }
+
+      updatePriceModeUI();
+    }
+
+    function syncMarginFromNumber() {
+      const value = Math.max(0, Number($('#marginPercent').value || 0));
+      const maxRange = Number($('#marginRange').max || 300);
+      $('#marginRange').value = Math.min(value, maxRange);
+      updateCalculatedPrice();
+    }
+
+    function syncMarginFromRange() {
+      $('#marginPercent').value = $('#marginRange').value;
+      updateCalculatedPrice();
+    }
+
+    async function saveProductLocalLegacy(event) {
+      event.preventDefault();
+      addUrlImagesFromInput();
+
+      const formData = new FormData(event.currentTarget);
+      const name = String(formData.get('name') || '').trim();
+      const rawVendor = String(formData.get('vendor') || '').trim();
+      const rawVendorPhone = String(formData.get('vendorPhone') || '').trim();
+      const size = String(formData.get('size') || '').trim();
+      const specs = String(formData.get('specs') || '').trim();
+
+      if (!name) {
+        alert('Nama produk/orderan wajib diisi dulu, bro.');
+        $('#name').focus();
+        return;
+      }
+
+      const isEditing = editingId !== null && editingId !== undefined;
+      const existingProduct = isEditing
+        ? products.find((item) => String(item.id) === String(editingId))
+        : null;
+      const productId = isEditing ? existingProduct?.id : Date.now();
+
+      if (isEditing && !existingProduct) {
+        alert('Produk yang mau diedit tidak ditemukan. Coba refresh halaman, bro.');
+        return;
+      }
+
+      const canEditVendor = !isEditing || isVendorUnlocked();
+      const vendor = canEditVendor ? rawVendor : (existingProduct?.vendor || '');
+      const vendorPhone = canEditVendor ? rawVendorPhone : (existingProduct?.vendorPhone || '');
+
+      const costPrice = Math.max(0, Number(formData.get('costPrice') || 0));
+      const marginPercent = Math.max(0, Number(formData.get('marginPercent') || 0));
+      const marginPrice = calculateMarkupAmount(costPrice, marginPercent);
+      const calculatedPrice = costPrice + marginPrice;
+      const priceMode = getSelectedPriceMode();
+      const customPriceText = String(formData.get('price') || '').trim();
+      if (priceMode === 'custom' && !customPriceText) {
+        alert('Harga jual custom wajib diisi kalau memilih mode Custom Manual, bro.');
+        $('#price').focus();
+        return;
+      }
+      const customPrice = priceMode === 'custom' ? Math.max(0, Number(customPriceText) || 0) : null;
+      const finalPrice = priceMode === 'custom' ? customPrice : calculatedPrice;
+      const images = imageDataList.length ? imageDataList : [DEFAULT_IMAGE];
+
+      const productData = {
+        ...(existingProduct || {}),
+        id: productId,
+        name,
+        vendor: vendor || 'Vendor belum diisi',
+        vendorPhone,
+        size: size || '-',
+        specs: specs || '-',
+        costPrice,
+        marginPercent,
+        marginPrice,
+        calculatedPrice,
+        priceMode,
+        customPrice,
+        price: finalPrice,
+        bgColor: existingProduct?.bgColor || BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)]
+      };
+
+      const beforeSave = products.slice();
+      const oldImages = imageStoreCache[String(productId)] ? [...imageStoreCache[String(productId)]] : [];
+      const imageSaved = await saveProductImages(productId, images);
+
+      if (!imageSaved && images.some(isInlineImage)) {
+        if (isEditing && oldImages.length) {
+          await saveProductImages(productId, oldImages);
+        } else if (!isEditing) {
+          await deleteProductImages(productId);
+        }
+        alert('Produk belum disimpan karena foto terlalu besar untuk browser. Coba kurangi jumlah foto, upload foto yang lebih kecil, atau pakai URL gambar.');
+        return;
+      }
+
+      if (!imageSaved) {
+        productData.imageUrls = images;
+        productData.imageUrl = images[0];
+      } else {
+        delete productData.imageUrl;
+        delete productData.imageUrls;
+      }
+
+      products = isEditing
+        ? products.map((item) => String(item.id) === String(productId) ? productData : item)
+        : [productData, ...products];
+
+      const saved = saveProducts();
+      if (!saved) {
+        products = beforeSave;
+        if (isEditing && oldImages.length) {
+          await saveProductImages(productId, oldImages);
+        } else if (!isEditing) {
+          await deleteProductImages(productId);
+        }
+        return;
+      }
+
+      lockVendorAccess();
+      renderProducts();
+      closeAddModal();
+    }
+
+
+    function setSyncStatus(message, status = '') {
+      const element = $('#firebaseStatus');
+      if (!element) return;
+      element.textContent = message;
+      element.title = message;
+      element.className = `sync-status ${status}`.trim();
+    }
+
+    function getSupabaseErrorMessage(error) {
+      if (!error) return 'Error tidak diketahui';
+      return error.message || error.details || error.hint || error.code || JSON.stringify(error);
+    }
+
+    function ensureSupabaseReady() {
+      const hasUrl = /^https:\/\/.+\.supabase\.co$/i.test(String(SUPABASE_URL || ''));
+      const hasKey = /^sb_(publishable|anon)_/i.test(String(SUPABASE_PUBLISHABLE_KEY || '')) || /^eyJ/i.test(String(SUPABASE_PUBLISHABLE_KEY || ''));
+      if (hasUrl && hasKey) return true;
+      setSyncStatus('Supabase config belum valid. Cek Project URL dan publishable/anon key.', 'error');
+      return false;
+    }
+
+    function uploadId() {
+      if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function existingImagePathForUrl(existingProduct, imageUrl) {
+      const urls = Array.isArray(existingProduct?.imageUrls) ? existingProduct.imageUrls : [];
+      const paths = Array.isArray(existingProduct?.imagePaths) ? existingProduct.imagePaths : [];
+      const index = urls.findIndex((url) => String(url) === String(imageUrl));
+      return index >= 0 ? (paths[index] || null) : null;
+    }
+
+    async function uploadImagesToSupabase(productId, images, existingProduct = null) {
+      if (!ensureSupabaseReady()) throw new Error('Supabase SDK belum siap');
+      const cleanedImages = (images || []).filter(Boolean);
+      const finalImages = cleanedImages.length ? cleanedImages : [DEFAULT_IMAGE];
+      const imageUrls = [];
+      const imagePaths = [];
+
+      for (let index = 0; index < finalImages.length; index += 1) {
+        const src = finalImages[index];
+
+        if (/^https?:\/\//i.test(String(src))) {
+          imageUrls.push(src);
+          imagePaths.push(existingImagePathForUrl(existingProduct, src));
+          continue;
+        }
+
+        if (isInlineImage(src)) {
+          const response = await fetch(src);
+          const blob = await response.blob();
+          const extension = blob.type.includes('png') ? 'png' : 'jpg';
+          const path = `products/${productId}/${Date.now()}-${index}-${uploadId()}.${extension}`;
+          const publicUrl = await supabaseStorageUpload(path, blob);
+          imageUrls.push(publicUrl || DEFAULT_IMAGE);
+          imagePaths.push(path);
+          continue;
+        }
+
+        imageUrls.push(DEFAULT_IMAGE);
+        imagePaths.push(null);
+      }
+
+      return { imageUrls, imagePaths };
+    }
+
+    async function deleteUnusedStorageImages(oldPaths = [], newPaths = []) {
+      if (!ensureSupabaseReady()) return;
+      const nextPaths = new Set((newPaths || []).filter(Boolean));
+      const pathsToDelete = (oldPaths || []).filter(Boolean).filter((path) => !nextPaths.has(path));
+      if (!pathsToDelete.length) return;
+
+      try {
+        await supabaseStorageRemove(pathsToDelete);
+      } catch (error) {
+        console.warn('Foto lama gagal dihapus dari Supabase Storage:', error);
+      }
+    }
+
+    function cleanSupabaseProduct(data = {}) {
+      const rawImages = Array.isArray(data.images) && data.images.length
+        ? data.images
+        : Array.isArray(data.image_urls) && data.image_urls.length
+          ? data.image_urls
+          : Array.isArray(data.imageUrls) && data.imageUrls.length
+            ? data.imageUrls
+            : [data.image_url || data.imageUrl].filter(Boolean);
+
+      const rawPaths = Array.isArray(data.image_paths)
+        ? data.image_paths
+        : Array.isArray(data.imagePaths)
+          ? data.imagePaths
+          : [];
+
+      return migrateProduct({
+        id: data.id,
+        name: data.name || 'Produk tanpa nama',
+        vendor: data.vendor || 'Vendor belum diisi',
+        vendorPhone: data.vendor_phone || data.vendorPhone || '',
+        size: data.size || '-',
+        specs: data.specification || data.specs || '-',
+        costPrice: Number(data.cost_price ?? data.costPrice ?? 0),
+        marginPercent: Number(data.margin_percent ?? data.marginPercent ?? 0),
+        marginPrice: Number(data.margin_price ?? data.marginPrice ?? 0),
+        calculatedPrice: Number(data.calculated_price ?? data.calculatedPrice ?? 0),
+        customPrice: data.custom_price ?? data.customPrice ?? null,
+        priceMode: data.price_mode || data.priceMode || null,
+        price: Number(data.price ?? data.final_price ?? data.calculated_price ?? 0),
+        imageUrls: rawImages.length ? rawImages : [DEFAULT_IMAGE],
+        imageUrl: rawImages[0] || DEFAULT_IMAGE,
+        imagePaths: rawPaths,
+        bgColor: data.bg_color || data.bgColor || BG_COLORS[0],
+        sortDate: Number(data.sort_date ?? data.sortDate ?? 0),
+        createdAt: data.created_at || data.createdAt || null,
+        updatedAt: data.updated_at || data.updatedAt || null
+      });
+    }
+
+    async function loadSupabaseProducts(showConnecting = true) {
+      if (!ensureSupabaseReady()) {
+        products = [];
+        renderProducts();
+        return;
+      }
+      if (showConnecting) setSyncStatus('Supabase: menghubungkan...');
+
+      try {
+        const data = await supabaseJsonRequest(`/${SUPABASE_TABLE}?select=*&order=sort_date.desc`);
+        products = (Array.isArray(data) ? data : [])
+          .map(cleanSupabaseProduct)
+          .sort((a, b) => Number(b.sortDate || 0) - Number(a.sortDate || 0));
+        renderProducts();
+        setSyncStatus('Supabase: tersambung', 'ok');
+      } catch (error) {
+        console.error('Supabase gagal membaca produk:', error);
+        products = [];
+        renderProducts();
+        setSyncStatus(`Supabase error: ${getSupabaseErrorMessage(error)}`, 'error');
+      }
+    }
+
+    function listenSupabaseProducts() {
+      loadSupabaseProducts(true);
+      // Versi v11 tidak pakai CDN Supabase JS agar tidak macet di status "menghubungkan".
+      // Data direfresh otomatis ringan setiap 30 detik.
+      window.setInterval(() => loadSupabaseProducts(false), 30000);
+    }
+
+    async function saveProduct(event) {
+      event.preventDefault();
+      if (!isVendorUnlocked()) {
+        alert('Mode customer hanya bisa melihat produk. Masuk mode divisi dulu untuk menyimpan perubahan.');
+        return;
+      }
+      addUrlImagesFromInput();
+
+      const formData = new FormData(event.currentTarget);
+      const name = String(formData.get('name') || '').trim();
+      const rawVendor = String(formData.get('vendor') || '').trim();
+      const rawVendorPhone = String(formData.get('vendorPhone') || '').trim();
+      const size = String(formData.get('size') || '').trim();
+      const specs = String(formData.get('specs') || '').trim();
+
+      if (!name) {
+        alert('Nama produk/orderan wajib diisi dulu, bro.');
+        $('#name').focus();
+        return;
+      }
+
+      const isEditing = editingId !== null && editingId !== undefined;
+      const existingProduct = isEditing
+        ? products.find((item) => String(item.id) === String(editingId))
+        : null;
+
+      if (isEditing && !existingProduct) {
+        alert('Produk yang mau diedit tidak ditemukan. Coba refresh halaman, bro.');
+        return;
+      }
+
+      const productId = String(isEditing ? existingProduct.id : uploadId());
+      const canEditVendor = !isEditing || isVendorUnlocked();
+      const vendor = canEditVendor ? rawVendor : (existingProduct?.vendor || '');
+      const vendorPhone = canEditVendor ? rawVendorPhone : (existingProduct?.vendorPhone || '');
+      const costPrice = Math.max(0, Number(formData.get('costPrice') || 0));
+      const marginPercent = Math.max(0, Number(formData.get('marginPercent') || 0));
+      const marginPrice = calculateMarkupAmount(costPrice, marginPercent);
+      const calculatedPrice = costPrice + marginPrice;
+      const priceMode = getSelectedPriceMode();
+      const customPriceText = String(formData.get('price') || '').trim();
+      if (priceMode === 'custom' && !customPriceText) {
+        alert('Harga jual custom wajib diisi kalau memilih mode Custom Manual, bro.');
+        $('#price').focus();
+        return;
+      }
+      const customPrice = priceMode === 'custom' ? Math.max(0, Number(customPriceText) || 0) : null;
+      const finalPrice = priceMode === 'custom' ? customPrice : calculatedPrice;
+      const images = imageDataList.length ? imageDataList : [DEFAULT_IMAGE];
+      const oldImagePaths = Array.isArray(existingProduct?.imagePaths) ? existingProduct.imagePaths : [];
+      const nowIso = new Date().toISOString();
+
+      try {
+        setSyncStatus('Supabase: menyimpan produk...');
+        $('#saveBtnText').textContent = isEditing ? 'Menyimpan Perubahan...' : 'Menyimpan...';
+
+        const { imageUrls, imagePaths } = await uploadImagesToSupabase(productId, images, existingProduct);
+        const bgColor = existingProduct?.bgColor || BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)];
+        const sortDate = Number(existingProduct?.sortDate || Date.now());
+
+        const productData = {
+          id: productId,
+          name,
+          vendor: vendor || 'Vendor belum diisi',
+          vendor_phone: vendorPhone,
+          size: size || '-',
+          specification: specs || '-',
+          cost_price: costPrice,
+          margin_percent: marginPercent,
+          margin_price: marginPrice,
+          calculated_price: calculatedPrice,
+          price_mode: priceMode,
+          custom_price: customPrice,
+          price: finalPrice,
+          images: imageUrls,
+          image_url: imageUrls[0] || DEFAULT_IMAGE,
+          image_paths: imagePaths,
+          bg_color: bgColor,
+          sort_date: sortDate,
+          updated_at: nowIso
+        };
+
+        if (!isEditing) productData.created_at = nowIso;
+
+        await supabaseJsonRequest(`/${SUPABASE_TABLE}?on_conflict=id`, {
+          method: 'POST',
+          headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+          body: [productData]
+        });
+
+        await deleteUnusedStorageImages(oldImagePaths, imagePaths);
+        lockVendorAccess();
+        setSyncStatus('Supabase: produk tersimpan', 'ok');
+        await loadSupabaseProducts(false);
+        closeAddModal();
+      } catch (error) {
+        console.error('Gagal menyimpan ke Supabase:', error);
+        const message = getSupabaseErrorMessage(error);
+        setSyncStatus(`Supabase gagal simpan: ${message}`, 'error');
+        alert(`Produk belum tersimpan ke Supabase. Detail: ${message}
+
+Pastikan SQL setup sudah di-run, tabel products ada, bucket product-images ada, dan policy sudah aktif.`);
+        setFormMode(isEditing ? 'edit' : 'add');
+      }
+    }
+
+    async function deleteProduct(productId) {
+      if (!isVendorUnlocked()) {
+        toggleVendorAccess();
+        if (!isVendorUnlocked()) return;
+      }
+      const product = products.find((item) => String(item.id) === String(productId));
+      const confirmed = confirm(`Hapus produk "${product?.name || 'ini'}" dari Supabase?`);
+      if (!confirmed) return;
+
+      try {
+        setSyncStatus('Supabase: menghapus produk...');
+        await supabaseJsonRequest(`/${SUPABASE_TABLE}?id=eq.${encodeURIComponent(String(productId))}`, {
+          method: 'DELETE',
+          headers: { Prefer: 'return=minimal' }
+        });
+
+        await deleteUnusedStorageImages(Array.isArray(product?.imagePaths) ? product.imagePaths : [], []);
+        setSyncStatus('Supabase: produk dihapus', 'ok');
+        if (selectedId && String(selectedId) === String(productId)) closeDetailModal();
+        await loadSupabaseProducts(false);
+      } catch (error) {
+        console.error('Gagal hapus produk dari Supabase:', error);
+        const message = getSupabaseErrorMessage(error);
+        setSyncStatus(`Supabase gagal hapus: ${message}`, 'error');
+        alert(`Produk belum berhasil dihapus dari Supabase. Detail: ${message}`);
+      }
+    }
+
+
+    function bindEvents() {
+      $('#openAddBtn').addEventListener('click', openAddModal);
+      $('#themeToggleBtn').addEventListener('click', toggleTheme);
+      $('#vendorAccessBtn')?.addEventListener('click', toggleVendorAccess);
+      $('#unlockVendorFormBtn')?.addEventListener('click', toggleVendorAccess);
+      $('#openLandingBtn')?.addEventListener('click', openLandingModal);
+      $('#closeLandingBtn')?.addEventListener('click', closeLandingModal);
+      $('#landingPrevBtn')?.addEventListener('click', () => moveLanding(-1));
+      $('#landingNextBtn')?.addEventListener('click', () => moveLanding(1));
+      $('#closeAddBtn').addEventListener('click', closeAddModal);
+      $('#closeDetailBtn').addEventListener('click', closeDetailModal);
+      $('#deleteDetailBtn').addEventListener('click', () => selectedId && deleteProduct(selectedId));
+      $('#editDetailBtn').addEventListener('click', () => selectedId && openEditModal(selectedId));
+      $('#searchInput').addEventListener('input', renderProducts);
+      $('#productForm').addEventListener('submit', saveProduct);
+      $('#landingForm')?.addEventListener('submit', saveLandingForm);
+
+      $('#costPrice').addEventListener('input', () => updateCalculatedPrice());
+      $('#marginPercent').addEventListener('input', syncMarginFromNumber);
+      $('#marginRange').addEventListener('input', syncMarginFromRange);
+      $('#price').addEventListener('input', () => { priceTouched = true; });
+      document.querySelectorAll('input[name="priceMode"]').forEach((input) => {
+        input.addEventListener('change', () => updatePriceModeUI());
+      });
+
+      $('#fileUpload').addEventListener('change', (event) => {
+        filesToImageData(event.target.files || []);
+        event.target.value = '';
+      });
+
+      $('#pasteZone').addEventListener('paste', handlePaste);
+      $('#imageUrl').addEventListener('paste', handlePaste);
+      $('#addUrlBtn').addEventListener('click', addUrlImagesFromInput);
+      $('#imageUrl').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          addUrlImagesFromInput();
+        }
+      });
+
+      $('#previewList').addEventListener('click', (event) => {
+        const removeButton = event.target.closest('[data-remove-image]');
+        if (!removeButton) return;
+        removeImage(Number(removeButton.dataset.removeImage));
+      });
+
+      $('#previewList').addEventListener('dragstart', (event) => {
+        const item = event.target.closest('[data-image-index]');
+        if (!item || event.target.closest('button')) return;
+        draggedImageIndex = Number(item.dataset.imageIndex);
+        item.classList.add('is-dragging');
+        event.stopPropagation();
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('application/x-pustakaorder-image-reorder', String(draggedImageIndex));
+        event.dataTransfer.setData('text/plain', String(draggedImageIndex));
+      });
+
+      $('#previewList').addEventListener('dragover', (event) => {
+        const item = event.target.closest('[data-image-index]');
+        if (!item || draggedImageIndex === null) return;
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer.dropEffect = 'move';
+        item.classList.add('is-drop-target');
+      });
+
+      $('#previewList').addEventListener('dragleave', (event) => {
+        const item = event.target.closest('[data-image-index]');
+        if (!item || draggedImageIndex === null) return;
+        event.stopPropagation();
+        item.classList.remove('is-drop-target');
+      });
+
+      $('#previewList').addEventListener('drop', (event) => {
+        const item = event.target.closest('[data-image-index]');
+        if (!item || draggedImageIndex === null) return;
+        event.preventDefault();
+        event.stopPropagation();
+        item.classList.remove('is-drop-target');
+        reorderImage(draggedImageIndex, Number(item.dataset.imageIndex));
+      });
+
+      $('#previewList').addEventListener('dragend', () => {
+        draggedImageIndex = null;
+        document.querySelectorAll('.preview-item').forEach((item) => {
+          item.classList.remove('is-dragging', 'is-drop-target');
+        });
+      });
+
+      $('#pasteZone').addEventListener('dragenter', (event) => {
+        event.preventDefault();
+        $('#pasteZone').classList.add('is-dragover');
+      });
+
+      $('#pasteZone').addEventListener('dragover', (event) => {
+        event.preventDefault();
+        $('#pasteZone').classList.add('is-dragover');
+      });
+
+      $('#pasteZone').addEventListener('dragleave', (event) => {
+        if (!$('#pasteZone').contains(event.relatedTarget)) $('#pasteZone').classList.remove('is-dragover');
+      });
+
+      $('#pasteZone').addEventListener('drop', handleImageDrop);
+
+
+      $('#landingStage')?.addEventListener('click', (event) => {
+        const frame = event.target.closest('[data-landing-index]');
+        if (!frame) return;
+        setLandingActive(Number(frame.dataset.landingIndex));
+      });
+
+      $('#landingDots')?.addEventListener('click', (event) => {
+        const dot = event.target.closest('[data-landing-dot]');
+        if (!dot) return;
+        setLandingActive(Number(dot.dataset.landingDot));
+      });
+
+      $('#landingEditorGrid')?.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-landing-apply-url]');
+        if (!button) return;
+        applyLandingUrl(Number(button.dataset.landingApplyUrl));
+      });
+
+      $('#landingEditorGrid')?.addEventListener('change', (event) => {
+        const input = event.target.closest('[data-landing-file]');
+        if (!input) return;
+        const index = Number(input.dataset.landingFile);
+        setLandingImageFromFile(index, input.files?.[0]);
+        input.value = '';
+      });
+
+      $('#detailThumbs').addEventListener('click', (event) => {
+        const thumb = event.target.closest('[data-thumb-index]');
+        if (!thumb || !selectedId) return;
+        const product = products.find((item) => String(item.id) === String(selectedId));
+        if (!product) return;
+        showDetailImage(product, Number(thumb.dataset.thumbIndex));
+      });
+
+      $('#productGrid').addEventListener('click', (event) => {
+        if (event.target.closest('a')) return;
+        const editButton = event.target.closest('[data-edit-id]');
+        if (editButton) {
+          event.stopPropagation();
+          openEditModal(editButton.dataset.editId);
+          return;
+        }
+
+        const deleteButton = event.target.closest('[data-delete-id]');
+        if (deleteButton) {
+          event.stopPropagation();
+          deleteProduct(deleteButton.dataset.deleteId);
+          return;
+        }
+
+        const card = event.target.closest('.card');
+        if (card) openDetailModal(card.dataset.id);
+      });
+
+      document.addEventListener('click', (event) => {
+        if (event.target === $('#detailModal')) closeDetailModal();
+        if (event.target === $('#addModal')) closeAddModal();
+        if (event.target === $('#landingModal')) closeLandingModal();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeDetailModal();
+          closeAddModal();
+          closeLandingModal();
+        }
+      });
+    }
+
+    async function startApp() {
+      initIcons();
+      bindEvents();
+      applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+      updateVendorGateUI();
+      products = [];
+      imageStoreCache = {};
+      renderPreviewImages();
+      updateCalculatedPrice(true);
+      renderProducts();
+      renderLandingCarousel();
+      loadLandingSlides();
+      listenSupabaseProducts();
+    }
+
+    startApp();
+  </script>
+</body>
+</html>
