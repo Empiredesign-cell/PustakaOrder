@@ -2190,7 +2190,7 @@
 
     <div class="section-head">
       <div>
-        <h3>Koleksi Produk / Orderan</h3>
+        <h3>Koleksi Produk</h3>
         <p id="resultText">0 produk ditemukan</p>
         <p id="firebaseStatus" class="sync-status">Terhubung | v42 customer auto 3s only</p>
       </div>
@@ -4066,7 +4066,7 @@
         renderProducts();
         return;
       }
-      if (showConnecting) setSyncStatus('Supabase: menghubungkan...');
+      if (showConnecting) setSyncStatus('menghubungkan...');
 
       try {
         const data = await supabaseJsonRequest(`/${SUPABASE_TABLE}?select=*&order=sort_date.desc`);
@@ -4074,7 +4074,7 @@
           .map(cleanSupabaseProduct)
           .sort((a, b) => Number(b.sortDate || 0) - Number(a.sortDate || 0));
         renderProducts();
-        setSyncStatus('Supabase: tersambung', 'ok');
+        setSyncStatus('Success', 'ok');
       } catch (error) {
         console.error('Supabase gagal membaca produk:', error);
         products = [];
